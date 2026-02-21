@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ciscose
+  labels:
+    org: ciscose
+    env: dcloud

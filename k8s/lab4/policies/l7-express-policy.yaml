@@ -1,0 +1,35 @@
+apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: l7-express-policy
+  namespace: demo-a
+spec:
+  endpointSelector:
+    matchLabels:
+      app: lab1-express
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: demo-a
+      toPorts:
+        - ports:
+            - port: "3000"
+              protocol: TCP
+          rules:
+            http:
+              - method: "GET"
+                path: "/"
+              - method: "GET"
+                path: "/health"
+    - fromEntities:
+        - world
+      toPorts:
+        - ports:
+            - port: "3000"
+              protocol: TCP
+          rules:
+            http:
+              - method: "GET"
+                path: "/"
+              - method: "GET"
+                path: "/health"

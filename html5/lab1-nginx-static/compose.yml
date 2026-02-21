@@ -1,0 +1,6 @@
+services:
+  static:
+    image: lab1-static:1.0
+    container_name: lab1-static-compose
+    ports:
+      - "8083:80"

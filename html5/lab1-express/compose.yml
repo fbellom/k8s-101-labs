@@ -1,0 +1,8 @@
+services:
+  express:
+    image: lab1-express:1.0
+    container_name: lab1-express-compose
+    ports:
+      - "8081:3000"
+    environment:
+      - PORT=3000

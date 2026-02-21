@@ -1,0 +1,28 @@
+apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: l7-allow-google-egress
+  namespace: demo-b
+spec:
+  endpointSelector: {}
+  ingress:
+    - {}
+  egress:
+    - toEndpoints: # DNS
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: ANY
+          rules:
+            dns:
+              - matchPattern: "*"
+    - toFQDNs:
+        - matchName: "google.com"
+        - matchName: "www.google.com"
+      toPorts:
+        - ports:
+            - port: "443"
+            - port: "80"

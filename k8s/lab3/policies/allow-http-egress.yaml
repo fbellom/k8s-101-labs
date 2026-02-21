@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-egress-http
+  namespace: demo-a
+spec:
+  podSelector: {} # applies to all pods in demo-a, or use matchLabels: app: busybox to scope it down
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              name: demo-a # only allow HTTP egress within demo-a
+      ports:
+        - protocol: TCP
+          port: 80
+        - protocol: TCP
+          port: 443
