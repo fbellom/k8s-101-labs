@@ -1,0 +1,1494 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="Freddy Bello" name="author"/>
+<link href="../lab_two/" rel="prev"/>
+<link href="../lab_four/" rel="next"/>
+<link href="../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.7.1" name="generator"/>
+<title>Scenario 3 - k8s for Cisco SE with KinD</title>
+<link href="../assets/stylesheets/main.484c7ddc.min.css" rel="stylesheet"/>
+<link href="../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body data-md-color-accent="indigo" data-md-color-primary="black" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#scenario-3-network-isolation-with-calico-in-kubernetes">
+          Skip to content
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header" data-md-component="header">
+<nav aria-label="Header" class="md-header__inner md-grid">
+<a aria-label="k8s for Cisco SE with KinD" class="md-header__button md-logo" data-md-component="logo" href=".." title="k8s for Cisco SE with KinD">
+<img alt="logo" src="../img/cisco_logo_white.svg"/>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            k8s for Cisco SE with KinD
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              Scenario 3
+            
+          </span>
+</div>
+</div>
+</div>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="Search" class="md-search__options">
+<button aria-label="Clear" class="md-search__icon md-icon" tabindex="-1" title="Clear" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Initializing search
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<nav aria-label="Tabs" class="md-tabs" data-md-component="tabs">
+<div class="md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="..">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../lab_zero/">
+        
+  
+  
+    
+  
+  Getting Started
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../lab_one/">
+        
+  
+  
+    
+  
+  Scenario 1
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../lab_two/">
+        
+  
+  
+    
+  
+  Scenario 2
+
+      </a>
+</li>
+<li class="md-tabs__item md-tabs__item--active">
+<a class="md-tabs__link" href="./">
+        
+  
+  
+    
+  
+  Scenario 3
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../lab_four/">
+        
+  
+  
+    
+  
+  Scenario 4
+
+      </a>
+</li>
+</ul>
+</div>
+</nav>
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Navigation" class="md-nav md-nav--primary md-nav--lifted" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="k8s for Cisco SE with KinD" class="md-nav__button md-logo" data-md-component="logo" href=".." title="k8s for Cisco SE with KinD">
+<img alt="logo" src="../img/cisco_logo_white.svg"/>
+</a>
+    k8s for Cisco SE with KinD
+  </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="..">
+<span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../lab_zero/">
+<span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../lab_one/">
+<span class="md-ellipsis">
+    
+  
+    Scenario 1
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../lab_two/">
+<span class="md-ellipsis">
+    
+  
+    Scenario 2
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    
+  
+    Scenario 3
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+<span class="md-ellipsis">
+    
+  
+    Scenario 3
+  
+
+    
+  </span>
+</a>
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#goals">
+<span class="md-ellipsis">
+      
+        Goals
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#estimated-completion">
+<span class="md-ellipsis">
+      
+        Estimated Completion
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#prerequisites">
+<span class="md-ellipsis">
+      
+        Prerequisites
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#tasks">
+<span class="md-ellipsis">
+      
+        Tasks
+      
+    </span>
+</a>
+<nav aria-label="Tasks" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#task-1-install-calico-cni">
+<span class="md-ellipsis">
+      
+        Task 1: Install Calico CNI
+      
+    </span>
+</a>
+<nav aria-label="Task 1: Install Calico CNI" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#11-create-a-new-kind-cluster">
+<span class="md-ellipsis">
+      
+        1.1 Create a new KinD cluster
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#12-create-the-new-kind-cluster">
+<span class="md-ellipsis">
+      
+        1.2 Create the new KinD Cluster
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#13-verify-kind-cluster-is-not-ready">
+<span class="md-ellipsis">
+      
+        1.3 Verify KinD Cluster is Not Ready
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#14-create-the-manifest-directory">
+<span class="md-ellipsis">
+      
+        1.4 Create the manifest directory
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#15-fetch-and-apply-the-calico-installation-manifest">
+<span class="md-ellipsis">
+      
+        1.5 Fetch and apply the Calico installation manifest
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#16-verify-the-calico-pods-are-running">
+<span class="md-ellipsis">
+      
+        1.6 Verify the Calico pods are running
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#task-2-deploy-sample-workloads">
+<span class="md-ellipsis">
+      
+        Task 2: Deploy Sample Workloads
+      
+    </span>
+</a>
+<nav aria-label="Task 2: Deploy Sample Workloads" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#21-create-namespaces">
+<span class="md-ellipsis">
+      
+        2.1 Create namespaces
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#22-deploy-nginx-in-each-namespace">
+<span class="md-ellipsis">
+      
+        2.2 Deploy NGINX in each namespace
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#task-3-confirm-default-connectivity">
+<span class="md-ellipsis">
+      
+        Task 3: Confirm Default Connectivity
+      
+    </span>
+</a>
+<nav aria-label="Task 3: Confirm Default Connectivity" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#31-create-a-busybox-test-pod">
+<span class="md-ellipsis">
+      
+        3.1 Create a busybox test pod
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#native-k8s-network-policies">
+<span class="md-ellipsis">
+      
+        Native k8s Network Policies
+      
+    </span>
+</a>
+<nav aria-label="Native k8s Network Policies" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#network-policy-stacking-in-k8s">
+<span class="md-ellipsis">
+      
+        Network Policy Stacking in k8s
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#task-4-apply-a-default-deny-policy">
+<span class="md-ellipsis">
+      
+        Task 4: Apply a Default Deny Policy
+      
+    </span>
+</a>
+<nav aria-label="Task 4: Apply a Default Deny Policy" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#41-create-a-deny-all-ingressegress-policy-in-demo-a">
+<span class="md-ellipsis">
+      
+        4.1 Create a deny-all ingress/egress policy in demo-a
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#42-test-connectivity-after-default-deny">
+<span class="md-ellipsis">
+      
+        4.2 Test connectivity after default-deny
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#task-5-allow-egress-to-dns-service">
+<span class="md-ellipsis">
+      
+        Task 5: Allow Egress to DNS Service
+      
+    </span>
+</a>
+<nav aria-label="Task 5: Allow Egress to DNS Service" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#51-create-an-allow-dns-policy">
+<span class="md-ellipsis">
+      
+        5.1 Create an allow DNS policy
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#52-validate-egress-to-dns-allowance">
+<span class="md-ellipsis">
+      
+        5.2 Validate egress to DNS allowance
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#challenge">
+<span class="md-ellipsis">
+      
+        Challenge
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#task-6-allow-ingress-to-specific-service">
+<span class="md-ellipsis">
+      
+        Task 6: Allow Ingress to Specific Service
+      
+    </span>
+</a>
+<nav aria-label="Task 6: Allow Ingress to Specific Service" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#61-create-an-allow-policy">
+<span class="md-ellipsis">
+      
+        6.1 Create an allow policy
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#62-validate-ingress-allowance">
+<span class="md-ellipsis">
+      
+        6.2 Validate ingress allowance
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#63-reconfirm-cross-namespace-blocking">
+<span class="md-ellipsis">
+      
+        6.3 Reconfirm cross-namespace blocking
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#64-create-an-allow-http-egress-policy">
+<span class="md-ellipsis">
+      
+        6.4 Create an allow http egress policy
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#65-validate-http-egress-allowance">
+<span class="md-ellipsis">
+      
+        6.5 Validate http egress allowance
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#66-final-policy-set">
+<span class="md-ellipsis">
+      
+        6.6 Final Policy Set
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#task-7-cleanup">
+<span class="md-ellipsis">
+      
+        Task 7: Cleanup
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#lab-completion">
+<span class="md-ellipsis">
+      
+        Lab Completion
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../lab_four/">
+<span class="md-ellipsis">
+    
+  
+    Scenario 4
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#goals">
+<span class="md-ellipsis">
+      
+        Goals
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#estimated-completion">
+<span class="md-ellipsis">
+      
+        Estimated Completion
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#prerequisites">
+<span class="md-ellipsis">
+      
+        Prerequisites
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#tasks">
+<span class="md-ellipsis">
+      
+        Tasks
+      
+    </span>
+</a>
+<nav aria-label="Tasks" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#task-1-install-calico-cni">
+<span class="md-ellipsis">
+      
+        Task 1: Install Calico CNI
+      
+    </span>
+</a>
+<nav aria-label="Task 1: Install Calico CNI" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#11-create-a-new-kind-cluster">
+<span class="md-ellipsis">
+      
+        1.1 Create a new KinD cluster
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#12-create-the-new-kind-cluster">
+<span class="md-ellipsis">
+      
+        1.2 Create the new KinD Cluster
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#13-verify-kind-cluster-is-not-ready">
+<span class="md-ellipsis">
+      
+        1.3 Verify KinD Cluster is Not Ready
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#14-create-the-manifest-directory">
+<span class="md-ellipsis">
+      
+        1.4 Create the manifest directory
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#15-fetch-and-apply-the-calico-installation-manifest">
+<span class="md-ellipsis">
+      
+        1.5 Fetch and apply the Calico installation manifest
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#16-verify-the-calico-pods-are-running">
+<span class="md-ellipsis">
+      
+        1.6 Verify the Calico pods are running
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#task-2-deploy-sample-workloads">
+<span class="md-ellipsis">
+      
+        Task 2: Deploy Sample Workloads
+      
+    </span>
+</a>
+<nav aria-label="Task 2: Deploy Sample Workloads" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#21-create-namespaces">
+<span class="md-ellipsis">
+      
+        2.1 Create namespaces
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#22-deploy-nginx-in-each-namespace">
+<span class="md-ellipsis">
+      
+        2.2 Deploy NGINX in each namespace
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#task-3-confirm-default-connectivity">
+<span class="md-ellipsis">
+      
+        Task 3: Confirm Default Connectivity
+      
+    </span>
+</a>
+<nav aria-label="Task 3: Confirm Default Connectivity" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#31-create-a-busybox-test-pod">
+<span class="md-ellipsis">
+      
+        3.1 Create a busybox test pod
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#native-k8s-network-policies">
+<span class="md-ellipsis">
+      
+        Native k8s Network Policies
+      
+    </span>
+</a>
+<nav aria-label="Native k8s Network Policies" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#network-policy-stacking-in-k8s">
+<span class="md-ellipsis">
+      
+        Network Policy Stacking in k8s
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#task-4-apply-a-default-deny-policy">
+<span class="md-ellipsis">
+      
+        Task 4: Apply a Default Deny Policy
+      
+    </span>
+</a>
+<nav aria-label="Task 4: Apply a Default Deny Policy" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#41-create-a-deny-all-ingressegress-policy-in-demo-a">
+<span class="md-ellipsis">
+      
+        4.1 Create a deny-all ingress/egress policy in demo-a
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#42-test-connectivity-after-default-deny">
+<span class="md-ellipsis">
+      
+        4.2 Test connectivity after default-deny
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#task-5-allow-egress-to-dns-service">
+<span class="md-ellipsis">
+      
+        Task 5: Allow Egress to DNS Service
+      
+    </span>
+</a>
+<nav aria-label="Task 5: Allow Egress to DNS Service" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#51-create-an-allow-dns-policy">
+<span class="md-ellipsis">
+      
+        5.1 Create an allow DNS policy
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#52-validate-egress-to-dns-allowance">
+<span class="md-ellipsis">
+      
+        5.2 Validate egress to DNS allowance
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#challenge">
+<span class="md-ellipsis">
+      
+        Challenge
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#task-6-allow-ingress-to-specific-service">
+<span class="md-ellipsis">
+      
+        Task 6: Allow Ingress to Specific Service
+      
+    </span>
+</a>
+<nav aria-label="Task 6: Allow Ingress to Specific Service" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#61-create-an-allow-policy">
+<span class="md-ellipsis">
+      
+        6.1 Create an allow policy
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#62-validate-ingress-allowance">
+<span class="md-ellipsis">
+      
+        6.2 Validate ingress allowance
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#63-reconfirm-cross-namespace-blocking">
+<span class="md-ellipsis">
+      
+        6.3 Reconfirm cross-namespace blocking
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#64-create-an-allow-http-egress-policy">
+<span class="md-ellipsis">
+      
+        6.4 Create an allow http egress policy
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#65-validate-http-egress-allowance">
+<span class="md-ellipsis">
+      
+        6.5 Validate http egress allowance
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#66-final-policy-set">
+<span class="md-ellipsis">
+      
+        6.6 Final Policy Set
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#task-7-cleanup">
+<span class="md-ellipsis">
+      
+        Task 7: Cleanup
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#lab-completion">
+<span class="md-ellipsis">
+      
+        Lab Completion
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<h1 id="scenario-3-network-isolation-with-calico-in-kubernetes">Scenario 3: Network Isolation with Calico in Kubernetes</h1>
+<p>In this lab, you will install the Calico CNI into the KinD cluster and learn how to use Kubernetes NetworkPolicies to control pod-to-pod traffic. Unlike a default Kubernetes installation, which allows all pods to communicate freely, Calico enforces network policy rules so that only permitted traffic flows are allowed.</p>
+<p>You will deploy a simple application and then incrementally lock down traffic between workloads using NetworkPolicies. By the end of the lab, you will understand how Calico implements network policies and how workloads can be isolated in a Kubernetes cluster.</p>
+<h2 id="goals">Goals</h2>
+<p>By the end of this lab, you will be able to:</p>
+<ul>
+<li>Install Calico CNI into an existing KinD cluster</li>
+<li>Deploy sample workloads for traffic control demonstrations</li>
+<li>Apply Kubernetes NetworkPolicies to restrict ingress and egress</li>
+<li>Validate that traffic is allowed or denied based on policy rules</li>
+</ul>
+<h2 id="estimated-completion">Estimated Completion</h2>
+<p>1 hr</p>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>Before starting this lab, you should have:</p>
+<ul>
+<li>Completed Lab 2 and have a running KinD cluster (my-k8s)</li>
+<li>Calico will be installed against this existing cluster</li>
+<li>Working manifests in: ~/workspace/k8s/lab3/</li>
+</ul>
+<hr/>
+<h2 id="tasks">Tasks</h2>
+<h3 id="task-1-install-calico-cni">Task 1: Install Calico CNI</h3>
+<p>In this task, you will install Calico into your KinD cluster to enable Kubernetes NetworkPolicy enforcement.</p>
+<h4 id="11-create-a-new-kind-cluster">1.1 Create a new KinD cluster</h4>
+<p>Go to <code>~/workspace/kind</code> and make a new folder <code>lab3</code></p>
+<pre><code class="language-sh">mkdir -p  ~/workspace/kind/lab3
+cd ~/workspace/kind/lab3
+</code></pre>
+<p>Create a <code>kind-cni-config.yml</code></p>
+<pre><code class="language-yaml">kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+  - role: control-plane
+    extraPortMappings:
+      -containerPort: 30000
+       hostPort: 30000
+  - role: worker
+  - role: worker
+networking:
+  disableDefaultCNI: true
+  podSubnet: 192.168.0.0/16
+</code></pre>
+<p><img alt="kind-config" src="../img/lab_3/Task_1_1_Create_Kind_Config.png"/></p>
+<p><em>Note:</em> <code>disableDefaultCNI</code> config.</p>
+<h4 id="12-create-the-new-kind-cluster">1.2 Create the new KinD Cluster</h4>
+<pre><code class="language-sh">kind create cluster --config kind-cni-config.yml --name my-k8s
+</code></pre>
+<p>Result:</p>
+<p><img alt="kind-creation" src="../img/lab_3/Task_1_1_Create_Kind_No_CNI.png"/></p>
+<h4 id="13-verify-kind-cluster-is-not-ready">1.3 Verify KinD Cluster is Not Ready</h4>
+<pre><code class="language-sh">kubectl get nodes -o wide
+</code></pre>
+<p><strong>Expected Result:</strong></p>
+<p><img alt="k8s-not-ready" src="../img/lab_3/Task_1_3_Verify_Nodes_Not_Ready.png"/></p>
+<p>Cluster will be in Not Ready until CNI is installed</p>
+<h4 id="14-create-the-manifest-directory">1.4 Create the manifest directory</h4>
+<pre><code class="language-sh">mkdir -p ~/workspace/k8s/lab3/calico
+cd ~/workspace/k8s/lab3/calico
+</code></pre>
+<h4 id="15-fetch-and-apply-the-calico-installation-manifest">1.5 Fetch and apply the Calico installation manifest</h4>
+<pre><code class="language-sh">kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.31.3/manifests/calico.yaml
+</code></pre>
+<p><strong>Expected Result:</strong></p>
+<p><img alt="calico-deployment" src="../img/lab_3/Task_1_5_Deploy_Calico.png"/></p>
+<h4 id="16-verify-the-calico-pods-are-running">1.6 Verify the Calico pods are running</h4>
+<pre><code class="language-sh">kubectl get pods -A
+</code></pre>
+<p><strong>Expected Result:</strong></p>
+<p>All Calico pods should be in Running status:</p>
+<p><img alt="calico-running" src="../img/lab_3/Task_1_6_Verify_Calico.png"/></p>
+<p>Also the cluster should be ready</p>
+<p><img alt="kind-ready" src="../img/lab_3/Task_1_6_Verify_Cluster_Ready.png"/></p>
+<hr/>
+<h3 id="task-2-deploy-sample-workloads">Task 2: Deploy Sample Workloads</h3>
+<p>In this task, you will deploy two simple NGINX pods in separate namespaces to demonstrate traffic control.</p>
+<div class="mermaid">flowchart TD
+   subgraph node["Node Worker"]
+    subgraph demo-b["namespace: demo-b"]
+      pod-b(nginx-b)
+    end
+    subgraph demo-a["namespace: demo-a"]
+      pod-a(nginx-a)
+      tester-a(tester-a)
+    end
+  end
+
+</div>
+<h4 id="21-create-namespaces">2.1 Create namespaces</h4>
+<blockquote>
+<p><strong>Namespace</strong> is a mechanism for isolating and organizing groups of resources (like Pods, Services, and Deployments) within a single physical cluster, effectively creating "virtual clusters". They are crucial for multi-tenant environments where multiple teams or projects share the same infrastructure without interfering with each other.</p>
+</blockquote>
+<p><img alt="name-spaces" src="../img/lab_3/Task_2_NS_Overview.png"/></p>
+<p>Run:</p>
+<pre><code class="language-sh">kubectl create ns demo-a
+kubectl create ns demo-b
+</code></pre>
+<p>Apply Labels to be used as selectors in the policy</p>
+<pre><code class="language-sh">kubectl label ns demo-a name=demo-a
+kubectl label ns demo-b name=demo-b
+</code></pre>
+<p><img alt="create-ns" src="../img/lab_3/Task_2_1_Create_NS_labels.png"/></p>
+<h4 id="22-deploy-nginx-in-each-namespace">2.2 Deploy NGINX in each namespace</h4>
+<p>Here we are going to use kubectl cli to create a deployment, which is useful for quick testing. <strong>For production is always a best practice to create manifest</strong></p>
+<p>Run for namespace <code>demo-a</code>:</p>
+<pre><code class="language-sh">kubectl create deployment nginx-a --image=nginx -n demo-a
+kubectl get deployment nginx-a -n demo-a
+kubectl describe deployment nginx-a -n demo-a
+</code></pre>
+<p><img alt="nginx-a-deploy" src="../img/lab_3/Task_2_2_Deploy_nginx_labels.png"/></p>
+<p>Create a Service by exposing the POD with a ClusterIP</p>
+<pre><code class="language-sh">kubectl expose deployment nginx-a --port=80 -n demo-a
+</code></pre>
+<p>Run for namespace <code>demo-b</code>:</p>
+<pre><code class="language-sh">kubectl create deployment nginx-b --image=nginx -n demo-b
+kubectl expose deployment nginx-b --port=80 -n demo-b
+</code></pre>
+<p><strong>Expected Result:</strong></p>
+<p>Two deployments and services exist</p>
+<pre><code class="language-sh">kubectl get svc -n demo-a
+kubectl get svc -n demo-b
+</code></pre>
+<p>Service for <code>nginx-a</code>
+<img alt="svc-a" src="../img/lab_3/Task_2_2_expose_nginx_via_ClusterIP.png"/></p>
+<p>Service for <code>nginx-b</code>
+<img alt="svc-b" src="../img/lab_3/Task_2_2_expose_nginx_b_via_ClusterIP.png"/></p>
+<p>Both should show a ClusterIP service on port 80.</p>
+<hr/>
+<h3 id="task-3-confirm-default-connectivity">Task 3: Confirm Default Connectivity</h3>
+<p>Before applying any network policies, Kubernetes allows all pod-to-pod traffic by default.</p>
+<blockquote>
+<p><em>Note</em>: <strong>By default Kubernetes allows all traffic unless a NetworkPolicy is applied</strong>. Network policies do not apply automatically — the CNI must support them. Calico is one such CNI that implements them.</p>
+</blockquote>
+<h4 id="31-create-a-busybox-test-pod">3.1 Create a busybox test pod</h4>
+<p>In <code>demo-a</code>:</p>
+<pre><code class="language-sh">kubectl run busybox --rm -ti --image=busybox --restart=Never -n demo-a -- /bin/sh
+</code></pre>
+<p><img alt="busy-box-rm" src="../img/lab_3/Task_3_1_Full-Accessl_Test_Pod.png"/></p>
+<blockquote>
+<p>busy-box is an example of an <em>ephemeral workload</em>. <code>--rm</code> flag means once the interactive session (<code>-ti</code> flag) finish, the pod will be destroyed right next.</p>
+</blockquote>
+<p>Inside the busybox shell:</p>
+<pre><code class="language-sh">wget -q --timeout=5 nginx-b.demo-b.svc.cluster.local -O -
+</code></pre>
+<blockquote>
+<p><em>Note:</em> the FQDN syntax <code>nginx-b.demo-b.svc.cluster.local</code> to call the resource inside the Cluster. The standard format is <code>&lt;resource-name&gt;.&lt;namespace-name&gt;.&lt;resource-type&gt;.&lt;cluster-domain&gt;</code>.</p>
+</blockquote>
+<p><strong>Expected Result:</strong></p>
+<p>The NGINX welcome HTML is returned — indicating cross-namespace connectivity.</p>
+<p><img alt="access-to-b-verify" src="../img/lab_3/Task_3_1_Full-Access_Verify.png"/></p>
+<p>Finally, run <code>exit</code> from the busy box, the workload will be deleted from Namespace.</p>
+<p><img alt="ephemeral-workload" src="../img/lab_3/Task_3_1_ephemeral_workload.png"/></p>
+<hr/>
+<h2 id="native-k8s-network-policies">Native k8s Network Policies</h2>
+<p>Network policy is a resource that defines: How pods in one namespace can communicate with pods in another namespace and sometimes with external traffic.</p>
+<p>In this section you are going to build several policies applying Zero-Trust and best practices.</p>
+<div class="mermaid">flowchart TB
+    subgraph demo-a["namespace: demo-a"]
+        subgraph policies["Network Policies"]
+            P1("🔴 deny-all\npodSelector: {}\nIngress + Egress")
+            P2("🟢 allow-dns-egress\npodSelector: {}\nEgress → :53")
+            P3("🔵 allow-nginx-a-ingress\npodSelector: nginx-a\nIngress ← :80")
+            P4("🟢 allow-http-egress\npodSelector: busybox\nEgress → :80")
+        end
+    end
+</div>
+<blockquote>
+<p>If you want to control traffic flow at the IP address or port level (OSI layer 3 or 4), NetworkPolicies allow you to specify rules for traffic flow within your cluster, and also between Pods and the outside world. Your cluster must use a network plugin that supports NetworkPolicy enforcement.</p>
+</blockquote>
+<p>Here a table with some of the CNI supporting Network Policies:</p>
+<table>
+<thead>
+<tr>
+<th>CNI Plugin</th>
+<th>Policy Support</th>
+<th>Key Features</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Calico</td>
+<td>Full</td>
+<td>High performance, BGP routing, supports NetworkPolicy and advanced GlobalNetworkPolicy.</td>
+</tr>
+<tr>
+<td><strong>Cilium</strong></td>
+<td>Full</td>
+<td>Uses eBPF for high-performance filtering, supports L7 (HTTP/gRPC) policies.</td>
+</tr>
+<tr>
+<td>Weave Net</td>
+<td>Full</td>
+<td>Easy to install, supports network policies.</td>
+</tr>
+<tr>
+<td>Amazon VPC CNI</td>
+<td>Supported</td>
+<td>Enables Kubernetes network policies directly on AWS VPC networking.</td>
+</tr>
+<tr>
+<td>Azure CNI</td>
+<td>Supported</td>
+<td>Supports FQDN filtering and standard NetworkPolicy.</td>
+</tr>
+<tr>
+<td>OpenShift CNI</td>
+<td>Supported</td>
+<td>Built-in support for OpenShift clusters.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="network-policy-stacking-in-k8s">Network Policy Stacking in k8s</h3>
+<p>When multiple NetworkPolicy resources apply to the same pod, Kubernetes evaluates the union of allowed traffic across all policies. This means for any given direction (ingress or egress), if any policy allows the flow, it is permitted. Conversely, anything not allowed by at least one rule is blocked.</p>
+<p>All the tasks in this section will show you how the stacking process works.</p>
+<h3 id="task-4-apply-a-default-deny-policy">Task 4: Apply a Default Deny Policy</h3>
+<p>Now you will restrict traffic so that only explicitly allowed connections are permitted. This lab will create a “default deny” policy per namespace.</p>
+<p><code>deny-all</code> baseline policies (recommended starting point) is a best practice to apply these first, then layer the specific allows above. Without these, pods with no policy default to <code>allow-all</code>.
+|</p>
+<h4 id="41-create-a-deny-all-ingressegress-policy-in-demo-a">4.1 Create a deny-all ingress/egress policy in demo-a</h4>
+<p>Create a new <code>policies</code> folder</p>
+<pre><code class="language-sh">mkdir -p ~/workspace/k8s/lab3/policies
+</code></pre>
+<p>Create <code>deny-all-a.yaml</code>:</p>
+<pre><code class="language-yaml">apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-all
+  namespace: demo-a
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+    - Egress
+</code></pre>
+<p><img alt="deny-all-policy" src="../img/lab_3/Task_4_1_Denya_all_NP_manifest.png"/></p>
+<p>Apply it:</p>
+<pre><code class="language-sh">kubectl apply -f deny-all-a.yaml -n demo-a
+</code></pre>
+<p><img alt="apply-deny-all" src="../img/lab_3/Task_4_1_Apply_Deny_all_NP_manifest.png"/></p>
+<p>Verify the policy with:</p>
+<pre><code class="language-sh">kubectl describe networkpolicy deny-all -n demo-a
+</code></pre>
+<p><img alt="describe-netwpol" src="../img/lab_3/Task_4_1_Check_Policy_Content.png"/></p>
+<h4 id="42-test-connectivity-after-default-deny">4.2 Test connectivity after default-deny</h4>
+<p>Run another busybox in <code>demo-a</code> in a different terminal:</p>
+<pre><code class="language-sh">kubectl run testpod --rm -ti --image=busybox --restart=Never -n demo-a -- /bin/sh
+</code></pre>
+<p>Then inside the shell:</p>
+<pre><code class="language-sh">nslookup nginx-b.demo-b.svc.cluster.local
+wget -qO- --timeout=5 nginx-b.demo-b.svc.cluster.local
+</code></pre>
+<p><strong>Expected Result:</strong></p>
+<p>The request should fail — demonstrating that all traffic is blocked unless explicitly allowed.</p>
+<p><img alt="traffic-blocked" src="../img/lab_3/Task_4_2_Denya_all_working.png"/></p>
+<blockquote>
+<p>The result shows that also the DNS resolution is failing, due to the forbidden egress traffic outside the namespace <code>demo-a</code></p>
+</blockquote>
+<hr/>
+<h3 id="task-5-allow-egress-to-dns-service">Task 5: Allow Egress to DNS Service</h3>
+<p>Kubernetes namespace <code>kube-system</code> host the DNS service for the cluster usinf CoreDNS. After the <code>deny-all</code> policy, this traffic is also affected so a explicit rule allowing it is required.</p>
+<h4 id="51-create-an-allow-dns-policy">5.1 Create an allow DNS policy</h4>
+<p>Create <code>allow-dns-egress.yaml</code></p>
+<pre><code class="language-yaml">apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-dns-egress
+  namespace: demo-a
+spec:
+  podSelector: {}
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+</code></pre>
+<p><img alt="allow-dns-egress" src="../img/lab_3/Task_5_1_Allow_dns_egress_manifest.png"/></p>
+<blockquote>
+<p>To get the <code>kubernetes.io/metadata.name: kube-system</code> label you can use the following cli command <code>kubectl get namespace kube-system --show-labels</code>. This shows the system label asigned to the resource by the cluster.</p>
+</blockquote>
+<p>Apply the policy</p>
+<pre><code class="language-sh">kubectl apply -f allow-dns-egress.yaml -n demo-a
+</code></pre>
+<p>Check the Network Policy stacking with <code>kubectl describe networkpolicies -n demo-a</code></p>
+<p><img alt="check-network-policy-stack" src="../img/lab_3/Task_5_1_Allow_dns_egress_verify.png"/></p>
+<h4 id="52-validate-egress-to-dns-allowance">5.2 Validate egress to DNS allowance</h4>
+<pre><code class="language-sh">kubectl run testpod --rm -ti --image=busybox --restart=Never -n demo-a -- /bin/sh
+</code></pre>
+<p>Then run</p>
+<pre><code class="language-sh">nslookup nginx-a.demo-a.svc.cluster.local
+</code></pre>
+<p><strong>Expected Result:</strong></p>
+<p>The name resolution output</p>
+<p><img alt="dns-allowed" src="../img/lab_3/Task_5_2_DNS_is%20_working_verify.png"/></p>
+<h4 id="challenge">Challenge</h4>
+<ol>
+<li>
+<p>What is the response for the <code>wget -qO- nginx-a.demo-a.svc.cluster.local</code> with this policy?</p>
+</li>
+<li>
+<p>What is the <em>service ClusterIP</em> response for the <code>nginx-b.demo-b.svc.cluster.local</code>?</p>
+</li>
+</ol>
+<hr/>
+<h3 id="task-6-allow-ingress-to-specific-service">Task 6: Allow Ingress to Specific Service</h3>
+<p>Next you will allow traffic from pods in <code>demo-a</code> to the <code>nginx-a</code> service only.</p>
+<h4 id="61-create-an-allow-policy">6.1 Create an allow policy</h4>
+<p>Create <code>allow-nginx-a.yaml</code>:</p>
+<pre><code class="language-yaml">apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-nginx-a
+  namespace: demo-a
+spec:
+  podSelector:
+    matchLabels:
+      app: nginx-a
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: demo-a
+      ports:
+        - protocol: TCP
+          port: 80
+</code></pre>
+<p><img alt="allow-nginx-a-manifest" src="../img/lab_3/Task_6_1_Ingress_to_nginx_a_manifest.png"/></p>
+<p>In the <code>podSelector</code> key it is a match for the <code>app</code> label to identify the Pod. You can verify with</p>
+<pre><code class="language-sh">   kubectl get pods -l app=nginx-a -n demo-a
+</code></pre>
+<p><img alt="verify-label" src="../img/lab_3/Task_5_1_Get_Pods_Labels.png"/></p>
+<p>Apply the policy</p>
+<pre><code class="language-sh">kubectl apply -f allow-nginx-a.yaml -n demo-a
+</code></pre>
+<p>Verify the policy</p>
+<pre><code class="language-sh">kubectl describe networkpolicy allow-nginx-a -n demo-a
+</code></pre>
+<p><img alt="apply-n-verify" src="../img/lab_3/Task_5_1_Allow_Ingress_nginx_a_Verify.png"/></p>
+<h4 id="62-validate-ingress-allowance">6.2 Validate ingress allowance</h4>
+<p>Run another busybox in <code>demo-a</code> in a terminal:</p>
+<pre><code class="language-sh">kubectl run testpod --rm -ti --image=busybox --restart=Never -n demo-a -- /bin/sh
+</code></pre>
+<p>Within the <code>demo-a</code> busybox shell:</p>
+<pre><code class="language-sh">wget -q --timeout=5 nginx-a.demo-a.svc.cluster.local -O -
+</code></pre>
+<p><strong>Expected Result:</strong></p>
+<p>The NGINX will fail. Why?</p>
+<p><img alt="nginx-a-ingress-fail" src="../img/lab_3/Task_6_1_Ingress_to_nginx_a_timeout.png"/></p>
+<p>The reason is because your test pod is also in <code>demo-a</code>, so it's also under the <code>deny-all</code> policy.</p>
+<p>That means it needs an explicit egress rule to port 80 to be able to make the HTTP request, otherwise the outbound connection is dropped before it even reaches nginx-a</p>
+<div class="mermaid">flowchart LR
+  subgraph demo-a["namespace: demo-a"]
+    testpod(Testpod A)--Egress Port 53--&gt;P1((Allow))--DNS--&gt;kube(kube-dns)
+    testpod(Testpod A)--Egress Port 80--&gt;P2((Denied))--X--&gt;nginxa(nginx-a)
+    testpod(Testpod A)--Egress Port 80--&gt;P2((Denied))--X--&gt;nginxb(nginx-b)
+  end
+
+</div>
+<h4 id="63-reconfirm-cross-namespace-blocking">6.3 Reconfirm cross-namespace blocking</h4>
+<p>Inside the same <code>demo-a</code> test pod:</p>
+<pre><code class="language-sh">wget -qO- --timeout=5 nginx-b.demo-b.svc.cluster.local -
+</code></pre>
+<p><strong>Expected Result:</strong>
+The request is still blocked — because no policy allows it.</p>
+<h4 id="64-create-an-allow-http-egress-policy">6.4 Create an allow http egress policy</h4>
+<p>Create a new file <code>allow-http-egress.yaml</code>:</p>
+<pre><code class="language-yaml">apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-http-egress
+  namespace: demo-a
+spec:
+  podSelector: {} # applies to all pods in demo-a, or use matchLabels: app: busybox to scope it down
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              name: demo-a # only allow HTTP egress within demo-a
+      ports:
+        - protocol: TCP
+          port: 80
+        - protocol: TCP
+          port: 443
+</code></pre>
+<p><img alt="allow-http-egress" src="../img/lab_3/Task_6_4_allow_egress_http_https_timeout.png"/></p>
+<p>Apply the policy</p>
+<pre><code class="language-sh">kubectl apply -f allow-http-egress.yaml -n demo-a
+</code></pre>
+<p>Verify the policy</p>
+<pre><code class="language-sh">kubectl describe networkpolicy allow-nginx-a -n demo-a
+</code></pre>
+<p><img alt="describe-http-policy" src="../img/lab_3/Task_6_4_check_egress_http_https_timeout.png"/></p>
+<h4 id="65-validate-http-egress-allowance">6.5 Validate http egress allowance</h4>
+<p>Run another busybox in <code>demo-a</code> in a terminal:</p>
+<pre><code class="language-sh">kubectl run testpod --rm -ti --image=busybox --restart=Never -n demo-a -- /bin/sh
+</code></pre>
+<p>Within the <code>demo-a</code> busybox shell:</p>
+<pre><code class="language-sh">wget -q --timeout=5 nginx-a.demo-a.svc.cluster.local -O -
+</code></pre>
+<p><strong>Expected Result:</strong></p>
+<p>Traffic works!</p>
+<p><img alt="http-traffic-works" src="../img/lab_3/Task_6_4_traffic_succesful.png"/></p>
+<div class="mermaid">flowchart LR
+  subgraph demo-a["namespace: demo-a"]
+    testpod(Testpod A)--Egress Port 53--&gt;P1((Allow))--DNS--&gt;kube(kube-dns)
+    testpod(Testpod A)--Egress Port 80--&gt;P2((Allow))--Ingress Port 80--&gt;nginxa(nginx-a)
+    testpod(Testpod A)--Egress Port 80--&gt;P3((Denied))--X--&gt;nginxb(nginx-b)
+  end
+</div>
+<h4 id="66-final-policy-set">6.6 Final Policy Set</h4>
+<p>Run</p>
+<pre><code class="language-sh"> kubectl get networkpolicies -n demo-a
+</code></pre>
+<p><img alt="policy-set" src="../img/lab_3/Task_6_6_Final_Policy_Set.png"/></p>
+<p>Network Policy Summary:</p>
+<table>
+<thead>
+<tr>
+<th>Policy</th>
+<th>Direction</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>default- deny-all</td>
+<td>Ingress/Egress</td>
+<td>blanket deny, both directions, all pods</td>
+</tr>
+<tr>
+<td>allow-dns-egress</td>
+<td>Egress</td>
+<td>egress only, all pods, port 53</td>
+</tr>
+<tr>
+<td>allow-http-egress</td>
+<td>Egress</td>
+<td>HTTP/HTTPS to nginx-a pod</td>
+</tr>
+<tr>
+<td>allow-nginx-a</td>
+<td>Ingress</td>
+<td>allow ingress to port 80 from ns demo-a</td>
+</tr>
+</tbody>
+</table>
+<p>Each policy has a single responsibility, a descriptive name that tells you exactly what it does, and touches only one direction. When something breaks in the future — and it will — you'll thank yourself for keeping them clean and separate.</p>
+<div class="mermaid">flowchart LR
+  subgraph demo-a["namespace: demo-a"]
+    testpod(Testpod A)--Egress Port 53--&gt;P1((allow))--DNS--&gt;kube(kube-dns)
+    testpod(Testpod A)--Egress Port 80--&gt;P2((allow))--Ingress Port 80--&gt;nginxa(nginx-a)
+    testpod(Testpod A)--Egress Port 80--&gt;P3((deny))--demo-b--&gt;nginxb(nginx-b)
+
+
+  end
+</div>
+<hr/>
+<h3 id="task-7-cleanup">Task 7: Cleanup</h3>
+<p>Remove the sample network policies and test namespaces.</p>
+<pre><code class="language-bash">kubectl delete ns demo-a demo-b
+</code></pre>
+<p><strong>Expected Result:</strong></p>
+<p>Both namespaces and all policies are deleted, returning the cluster to its previous state.</p>
+<p>Remove the kind cluster</p>
+<pre><code class="language-bash">kind delete cluster --name my-k8s
+</code></pre>
+<p><strong>Expected Result:</strong></p>
+<p>Cluster is removed</p>
+<hr/>
+<h2 id="lab-completion">Lab Completion</h2>
+<p><strong>Congratulations! You have completed Lab 3</strong></p>
+<ul>
+<li>
+<p>You installed Calico networking, deployed workloads, and implemented Kubernetes L3/L4 Native NetworkPolicies to secure traffic between pods.</p>
+</li>
+<li>
+<p>You apply best practices for Network Policy. Explicit Policy for Ingress and Egress where created and tested.</p>
+</li>
+<li>
+<p>You now understand how traffic flows by default and how to lock it down using policy rules.</p>
+</li>
+</ul>
+</article>
+</div>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+<div class="md-copyright__highlight">
+      Copyright © 2026 - Freddy Bello
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+<script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+<script type="module">import mermaid from "https://unpkg.com/mermaid@10.4.0/dist/mermaid.esm.min.mjs";
+mermaid.initialize({
+    theme: "dark",
+    themeVariables: {
+        primaryColor: "#07182d",
+        lineColor: "#02c8ff",
+        primaryBorderColor: "#02c8ff",
+        backgroundColor: "#07182d",
+        primaryTextColor: "#e7e7e7"
+    }
+});</script></body>
+</html>

@@ -1,0 +1,1927 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="Freddy Bello" name="author"/>
+<link href="../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.7.1" name="generator"/>
+<title>Scenario 4: Advanced Networking with Cilium CNI in Kubernetes - k8s for Cisco SE with KinD</title>
+<link href="../assets/stylesheets/main.484c7ddc.min.css" rel="stylesheet"/>
+<link href="../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body data-md-color-accent="indigo" data-md-color-primary="black" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#scenario-4-advanced-networking-with-cilium-cni-in-kubernetes">
+          Skip to content
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header" data-md-component="header">
+<nav aria-label="Header" class="md-header__inner md-grid">
+<a aria-label="k8s for Cisco SE with KinD" class="md-header__button md-logo" data-md-component="logo" href=".." title="k8s for Cisco SE with KinD">
+<img alt="logo" src="../img/cisco_logo_white.svg"/>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            k8s for Cisco SE with KinD
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              Scenario 4: Advanced Networking with Cilium CNI in Kubernetes
+            
+          </span>
+</div>
+</div>
+</div>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="Search" class="md-search__options">
+<button aria-label="Clear" class="md-search__icon md-icon" tabindex="-1" title="Clear" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Initializing search
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<nav aria-label="Tabs" class="md-tabs" data-md-component="tabs">
+<div class="md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="..">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../lab_zero/">
+        
+  
+  
+    
+  
+  Getting Started
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../lab_one/">
+        
+  
+  
+    
+  
+  Scenario 1
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../lab_two/">
+        
+  
+  
+    
+  
+  Scenario 2
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../lab_three/">
+        
+  
+  
+    
+  
+  Scenario 3
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../lab_four/">
+        
+  
+  
+    
+  
+  Scenario 4
+
+      </a>
+</li>
+</ul>
+</div>
+</nav>
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Navigation" class="md-nav md-nav--primary md-nav--lifted" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="k8s for Cisco SE with KinD" class="md-nav__button md-logo" data-md-component="logo" href=".." title="k8s for Cisco SE with KinD">
+<img alt="logo" src="../img/cisco_logo_white.svg"/>
+</a>
+    k8s for Cisco SE with KinD
+  </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="..">
+<span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../lab_zero/">
+<span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../lab_one/">
+<span class="md-ellipsis">
+    
+  
+    Scenario 1
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../lab_two/">
+<span class="md-ellipsis">
+    
+  
+    Scenario 2
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../lab_three/">
+<span class="md-ellipsis">
+    
+  
+    Scenario 3
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../lab_four/">
+<span class="md-ellipsis">
+    
+  
+    Scenario 4
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#goals">
+<span class="md-ellipsis">
+      
+        Goals
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#estimated-completion">
+<span class="md-ellipsis">
+      
+        Estimated Completion
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#prerequisites">
+<span class="md-ellipsis">
+      
+        Prerequisites
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#workspace">
+<span class="md-ellipsis">
+      
+        Workspace
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#tasks">
+<span class="md-ellipsis">
+      
+        Tasks
+      
+    </span>
+</a>
+<nav aria-label="Tasks" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#task-1-create-a-kind-cluster-without-cni-and-without-kube-proxy">
+<span class="md-ellipsis">
+      
+        Task 1: Create a KinD Cluster without CNI and without kube-proxy
+      
+    </span>
+</a>
+<nav aria-label="Task 1: Create a KinD Cluster without CNI and without kube-proxy" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#11-create-the-kind-configuration-folder">
+<span class="md-ellipsis">
+      
+        1.1 Create the KinD configuration folder
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#12-create-the-kind-cluster-configuration-file">
+<span class="md-ellipsis">
+      
+        1.2 Create the KinD cluster configuration file
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#13-create-the-cluster">
+<span class="md-ellipsis">
+      
+        1.3 Create the cluster
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#14-verify-the-cluster-nodes-are-not-ready">
+<span class="md-ellipsis">
+      
+        1.4 Verify the cluster nodes are Not Ready
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#15-verify-kube-proxy-is-not-running">
+<span class="md-ellipsis">
+      
+        1.5 Verify kube-proxy is NOT running
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#task-2-install-cilium-cni-using-helm">
+<span class="md-ellipsis">
+      
+        Task 2: Install Cilium CNI using Helm
+      
+    </span>
+</a>
+<nav aria-label="Task 2: Install Cilium CNI using Helm" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#manifests-vs-helm-charts">
+<span class="md-ellipsis">
+      
+        Manifests vs. Helm Charts
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#21-add-the-cilium-helm-repository">
+<span class="md-ellipsis">
+      
+        2.1 Add the Cilium Helm repository
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#22-install-cilium-with-helm">
+<span class="md-ellipsis">
+      
+        2.2 Install Cilium with Helm
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#23-verify-cilium-pods-are-running">
+<span class="md-ellipsis">
+      
+        2.3 Verify Cilium pods are running
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#24-verify-nodes-are-ready">
+<span class="md-ellipsis">
+      
+        2.4 Verify nodes are Ready
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#25-validate-cilium-status-with-the-cli">
+<span class="md-ellipsis">
+      
+        2.5 Validate Cilium status with the CLI
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#task-3-verify-hubble-and-access-the-hubble-ui">
+<span class="md-ellipsis">
+      
+        Task 3: Verify Hubble and Access the Hubble UI
+      
+    </span>
+</a>
+<nav aria-label="Task 3: Verify Hubble and Access the Hubble UI" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#31-verify-hubble-status">
+<span class="md-ellipsis">
+      
+        3.1 Verify Hubble status
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#32-observe-live-traffic-with-hubble-cli">
+<span class="md-ellipsis">
+      
+        3.2 Observe live traffic with Hubble CLI
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#33-access-the-hubble-ui-via-kubectl-port-forward">
+<span class="md-ellipsis">
+      
+        3.3 Access the Hubble UI via kubectl port-forward
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#task-4-deploy-sample-workloads">
+<span class="md-ellipsis">
+      
+        Task 4: Deploy Sample Workloads
+      
+    </span>
+</a>
+<nav aria-label="Task 4: Deploy Sample Workloads" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#41-create-namespaces">
+<span class="md-ellipsis">
+      
+        4.1 Create namespaces
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#42-load-the-lab-1-express-image-into-kind">
+<span class="md-ellipsis">
+      
+        4.2 Load the Lab 1 Express image into KinD
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#43-deploy-nginx-in-each-namespace">
+<span class="md-ellipsis">
+      
+        4.3 Deploy NGINX in each namespace
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#44-deploy-the-express-app-in-demo-a">
+<span class="md-ellipsis">
+      
+        4.4 Deploy the Express app in demo-a
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#45-verify-all-workloads">
+<span class="md-ellipsis">
+      
+        4.5 Verify all workloads
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#task-5-confirm-default-connectivity-no-policies">
+<span class="md-ellipsis">
+      
+        Task 5: Confirm Default Connectivity (No Policies)
+      
+    </span>
+</a>
+<nav aria-label="Task 5: Confirm Default Connectivity (No Policies)" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#51-test-cross-namespace-connectivity">
+<span class="md-ellipsis">
+      
+        5.1 Test cross-namespace connectivity
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#network-policies-with-cilium">
+<span class="md-ellipsis">
+      
+        Network Policies with Cilium
+      
+    </span>
+</a>
+<nav aria-label="Network Policies with Cilium" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#task-6-apply-a-default-deny-policy">
+<span class="md-ellipsis">
+      
+        Task 6: Apply a Default Deny Policy
+      
+    </span>
+</a>
+<nav aria-label="Task 6: Apply a Default Deny Policy" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#61-create-the-policies-directory">
+<span class="md-ellipsis">
+      
+        6.1 Create the policies directory
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#62-create-a-deny-all-policy">
+<span class="md-ellipsis">
+      
+        6.2 Create a deny-all policy
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#63-verify-the-policy">
+<span class="md-ellipsis">
+      
+        6.3 Verify the policy
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#64-test-connectivity-after-deny-all">
+<span class="md-ellipsis">
+      
+        6.4 Test connectivity after deny-all
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#task-7-allow-egress-to-dns-service">
+<span class="md-ellipsis">
+      
+        Task 7: Allow Egress to DNS Service
+      
+    </span>
+</a>
+<nav aria-label="Task 7: Allow Egress to DNS Service" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#71-create-the-allow-dns-policy">
+<span class="md-ellipsis">
+      
+        7.1 Create the allow-dns policy
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#72-validate-dns-works">
+<span class="md-ellipsis">
+      
+        7.2 Validate DNS works
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#task-8-allow-ingress-and-http-egress">
+<span class="md-ellipsis">
+      
+        Task 8: Allow Ingress and HTTP Egress
+      
+    </span>
+</a>
+<nav aria-label="Task 8: Allow Ingress and HTTP Egress" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#81-create-an-ingress-policy-for-nginx-a">
+<span class="md-ellipsis">
+      
+        8.1 Create an ingress policy for nginx-a
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#82-create-an-http-egress-policy">
+<span class="md-ellipsis">
+      
+        8.2 Create an HTTP egress policy
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#83-validate-the-l3l4-policy-stack">
+<span class="md-ellipsis">
+      
+        8.3 Validate the L3/L4 policy stack
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#84-review-the-policy-stack">
+<span class="md-ellipsis">
+      
+        8.4 Review the policy stack
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#task-9-cilium-l7-http-policy-ciliumnetworkpolicy">
+<span class="md-ellipsis">
+      
+        Task 9: Cilium L7 HTTP Policy (CiliumNetworkPolicy)
+      
+    </span>
+</a>
+<nav aria-label="Task 9: Cilium L7 HTTP Policy (CiliumNetworkPolicy)" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#91-create-a-ciliumnetworkpolicy-for-the-express-app">
+<span class="md-ellipsis">
+      
+        9.1 Create a CiliumNetworkPolicy for the Express app
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#92-verify-the-ciliumnetworkpolicy">
+<span class="md-ellipsis">
+      
+        9.2 Verify the CiliumNetworkPolicy
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#93-test-allowed-requests-get-and-get-health">
+<span class="md-ellipsis">
+      
+        9.3 Test allowed requests (GET / and GET /health)
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#94-test-denied-requests-post-and-unknown-paths">
+<span class="md-ellipsis">
+      
+        9.4 Test denied requests (POST and unknown paths)
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#95-observe-l7-drops-in-hubble">
+<span class="md-ellipsis">
+      
+        9.5 Observe L7 drops in Hubble
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#task-10-expose-the-secured-app-with-loadbalancer-and-l2-announcements">
+<span class="md-ellipsis">
+      
+        Task 10: Expose the Secured App with LoadBalancer and L2 Announcements
+      
+    </span>
+</a>
+<nav aria-label="Task 10: Expose the Secured App with LoadBalancer and L2 Announcements" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#101-create-a-ciliuml2announcementpolicy">
+<span class="md-ellipsis">
+      
+        10.1 Create a CiliumL2AnnouncementPolicy
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#102-create-a-ciliumloadbalancerippool">
+<span class="md-ellipsis">
+      
+        10.2 Create a CiliumLoadBalancerIPPool
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#103-update-the-ciliumnetworkpolicy-to-allow-external-ingress">
+<span class="md-ellipsis">
+      
+        10.3 Update the CiliumNetworkPolicy to allow external ingress
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#104-create-a-loadbalancer-service-for-the-express-app">
+<span class="md-ellipsis">
+      
+        10.4 Create a LoadBalancer Service for the Express app
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#105-verify-the-loadbalancer-ip-is-assigned">
+<span class="md-ellipsis">
+      
+        10.5 Verify the LoadBalancer IP is assigned
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#106-test-connectivity-via-the-loadbalancer-ip">
+<span class="md-ellipsis">
+      
+        10.6 Test connectivity via the LoadBalancer IP
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#107-verify-l7-policies-still-apply-to-external-traffic">
+<span class="md-ellipsis">
+      
+        10.7 Verify L7 policies still apply to external traffic
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#task-11-observe-traffic-in-hubble-ui">
+<span class="md-ellipsis">
+      
+        Task 11: Observe Traffic in Hubble UI
+      
+    </span>
+</a>
+<nav aria-label="Task 11: Observe Traffic in Hubble UI" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#111-ensure-port-forwarding-is-active">
+<span class="md-ellipsis">
+      
+        11.1 Ensure port-forwarding is active
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#112-open-hubble-ui">
+<span class="md-ellipsis">
+      
+        11.2 Open Hubble UI
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#113-explore-the-service-map">
+<span class="md-ellipsis">
+      
+        11.3 Explore the Service Map
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#task-12-cleanup">
+<span class="md-ellipsis">
+      
+        Task 12: Cleanup
+      
+    </span>
+</a>
+<nav aria-label="Task 12: Cleanup" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#121-delete-namespaces-and-policies">
+<span class="md-ellipsis">
+      
+        12.1 Delete namespaces and policies
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#122-delete-the-l2-and-loadbalancer-resources">
+<span class="md-ellipsis">
+      
+        12.2 Delete the L2 and LoadBalancer resources
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#123-destroy-the-kind-cluster">
+<span class="md-ellipsis">
+      
+        12.3 Destroy the KinD cluster
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#124-confirm-cleanup">
+<span class="md-ellipsis">
+      
+        12.4 Confirm cleanup
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#lab-completion">
+<span class="md-ellipsis">
+      
+        Lab Completion
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<h1 id="scenario-4-advanced-networking-with-cilium-cni-in-kubernetes">Scenario 4: Advanced Networking with Cilium CNI in Kubernetes</h1>
+<p>In this lab, you will install the Cilium CNI into a KinD cluster using Helm and learn how Cilium extends Kubernetes networking beyond what traditional CNIs like Calico offer. Cilium leverages eBPF (extended Berkeley Packet Filter) to provide high-performance networking, observability, and security—including L7 (application-layer) policy enforcement.</p>
+<p>You will create a cluster without a default CNI and without kube-proxy, install Cilium via Helm, enable Hubble for real-time network observability, build a complete network policy stack that includes both standard L3/L4 and Cilium-native L7 HTTP policies, and then expose your secured application to the outside world using LoadBalancer services with L2 announcements.</p>
+<h2 id="goals">Goals</h2>
+<p>By the end of this lab, you will be able to:</p>
+<ul>
+<li>Create a KinD cluster without a default CNI and without kube-proxy</li>
+<li>Install Cilium CNI using Helm (and understand the difference vs. static manifests)</li>
+<li>Verify Cilium and Hubble are operational</li>
+<li>Access the Hubble UI from your remote workstation</li>
+<li>Apply Kubernetes NetworkPolicies (deny-all, allow-dns, allow-http)</li>
+<li>Apply Cilium L7 HTTP-aware policies using CiliumNetworkPolicy</li>
+<li>Configure L2 announcements and LoadBalancer services to expose secured workloads</li>
+</ul>
+<h2 id="estimated-completion">Estimated Completion</h2>
+<p>1.5 hr</p>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>Before starting this lab, you should have:</p>
+<ul>
+<li>Completed Labs 0–2</li>
+<li>Docker image: <code>lab1-express:1.0</code> (from Lab 1)</li>
+<li>Familiarity with Kubernetes NetworkPolicies (Lab 3)</li>
+<li>Cilium CLI and Hubble CLI installed (verified in Lab 0, Tasks 5.1 and 5.2)</li>
+</ul>
+<p>Verify Cilium CLI:</p>
+<pre><code class="language-sh">cilium version
+</code></pre>
+<p>Verify Hubble CLI:</p>
+<pre><code class="language-sh">hubble version
+</code></pre>
+<p>Verify the lab1-express image is available:</p>
+<pre><code class="language-sh">docker images | grep lab1-express
+</code></pre>
+<h2 id="workspace">Workspace</h2>
+<p>KinD cluster configuration:</p>
+<pre><code class="language-sh">~/workspace/kind/lab4/
+</code></pre>
+<p>Kubernetes and Cilium manifests:</p>
+<pre><code class="language-sh">~/workspace/k8s/lab4/
+</code></pre>
+<hr/>
+<h2 id="tasks">Tasks</h2>
+<div class="mermaid">flowchart TB
+  subgraph kind["KinD Cluster — no kube-proxy"]
+    subgraph cilium["Cilium CNI (eBPF)"]
+      direction TB
+      kpr["Kube-Proxy Replacement"]
+      l2["L2 Announcements"]
+      np["Network Policies L3/L4"]
+      cnp["CiliumNetworkPolicy L7"]
+    end
+    subgraph hubble["Hubble Observability"]
+      relay["Hubble Relay"]
+      ui["Hubble UI"]
+    end
+    subgraph workloads["Workloads"]
+      nginxa(nginx-a)
+      nginxb(nginx-b)
+      express(lab1-express)
+    end
+    cilium --&gt; workloads
+    hubble --&gt; cilium
+  end
+  browser["Jumphost Browser"] --&gt;|port-forward| ui
+  host["Host curl"] --&gt;|LoadBalancer IP| express
+</div>
+<h3 id="task-1-create-a-kind-cluster-without-cni-and-without-kube-proxy">Task 1: Create a KinD Cluster without CNI and without kube-proxy</h3>
+<p>In Lab 3, you created a cluster with <code>disableDefaultCNI: true</code> to install Calico. In this lab, you will also disable kube-proxy so that Cilium can fully replace it using eBPF-based packet processing. This is known as <strong>kube-proxy replacement</strong> and is the recommended deployment model for Cilium.</p>
+<h4 id="11-create-the-kind-configuration-folder">1.1 Create the KinD configuration folder</h4>
+<pre><code class="language-sh">mkdir -p ~/workspace/kind/lab4
+cd ~/workspace/kind/lab4
+</code></pre>
+<h4 id="12-create-the-kind-cluster-configuration-file">1.2 Create the KinD cluster configuration file</h4>
+<p>Create a file named <code>kind-cilium-config.yaml</code>:</p>
+<pre><code class="language-yaml">kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+  - role: control-plane
+    extraPortMappings:
+      - containerPort: 30000
+        hostPort: 30000
+      - containerPort: 31100
+        hostPort: 31100
+      - containerPort: 31200
+        hostPort: 31200
+      - containerPort: 31300
+        hostPort: 31300
+      - containerPort: 31400
+        hostPort: 31400
+      - containerPort: 31500
+        hostPort: 31500
+  - role: worker
+  - role: worker
+networking:
+  disableDefaultCNI: true
+  kubeProxyMode: "none"
+</code></pre>
+<blockquote>
+<p><strong>Key differences from Lab 3:</strong></p>
+<ul>
+<li><code>disableDefaultCNI: true</code> — same as before, prevents KinD from installing the default kindnet CNI</li>
+<li><code>kubeProxyMode: "none"</code> — <strong>new</strong>: disables kube-proxy entirely, allowing Cilium to handle all service routing via eBPF</li>
+</ul>
+</blockquote>
+<h4 id="13-create-the-cluster">1.3 Create the cluster</h4>
+<pre><code class="language-sh">kind create cluster --name my-k8s --config kind-cilium-config.yaml
+</code></pre>
+<p><strong>Expected Result:</strong></p>
+<pre><code class="language-sh">Creating cluster "my-k8s" ...
+Set kubectl context to "kind-my-k8s"
+</code></pre>
+<h4 id="14-verify-the-cluster-nodes-are-not-ready">1.4 Verify the cluster nodes are Not Ready</h4>
+<pre><code class="language-sh">kubectl get nodes -o wide
+</code></pre>
+<p><strong>Expected Result:</strong></p>
+<p>All nodes should show <code>NotReady</code> status — this is expected because no CNI is installed yet.</p>
+<pre><code class="language-sh">NAME                   STATUS     ROLES           AGE   VERSION
+my-k8s-control-plane   NotReady   control-plane   30s   ...
+my-k8s-worker          NotReady   &lt;none&gt;          15s   ...
+my-k8s-worker2         NotReady   &lt;none&gt;          15s   ...
+</code></pre>
+<h4 id="15-verify-kube-proxy-is-not-running">1.5 Verify kube-proxy is NOT running</h4>
+<pre><code class="language-sh">kubectl get pods -n kube-system
+</code></pre>
+<p><strong>Expected Result:</strong></p>
+<p>You should <strong>not</strong> see any <code>kube-proxy</code> pods. You will see <code>coredns</code> pods in <code>Pending</code> state (waiting for the CNI).</p>
+<hr/>
+<h3 id="task-2-install-cilium-cni-using-helm">Task 2: Install Cilium CNI using Helm</h3>
+<p>In Lab 3, Calico was installed using a static YAML manifest (<code>kubectl apply -f calico.yaml</code>). In this lab, you will install Cilium using <strong>Helm</strong>, which is the recommended installation method.</p>
+<h4 id="manifests-vs-helm-charts">Manifests vs. Helm Charts</h4>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Static Manifest (<code>kubectl apply -f</code>)</th>
+<th>Helm Chart (<code>helm install</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Configuration</td>
+<td>Edit YAML directly</td>
+<td>Use <code>--set</code> flags or <code>values.yaml</code></td>
+</tr>
+<tr>
+<td>Upgrades</td>
+<td>Re-download and re-apply manually</td>
+<td><code>helm upgrade</code> with version control</td>
+</tr>
+<tr>
+<td>Rollback</td>
+<td>Manual</td>
+<td><code>helm rollback</code> built-in</td>
+</tr>
+<tr>
+<td>Customization</td>
+<td>Search-and-replace in large YAML</td>
+<td>Templated, parameterized values</td>
+</tr>
+<tr>
+<td>Reproducibility</td>
+<td>Hard to track what changed</td>
+<td>Version-pinned, declarative</td>
+</tr>
+<tr>
+<td>Best for</td>
+<td>Quick demos, simple installs</td>
+<td>Production, repeatable environments</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Helm is a package manager for Kubernetes. A <strong>Helm chart</strong> is a collection of templates and default values that produce Kubernetes manifests. Think of it as <code>docker compose</code> but for Kubernetes resources.</p>
+</blockquote>
+<h4 id="21-add-the-cilium-helm-repository">2.1 Add the Cilium Helm repository</h4>
+<pre><code class="language-sh">helm repo add cilium https://helm.cilium.io/
+helm repo update
+</code></pre>
+<p><strong>Expected Result:</strong></p>
+<pre><code class="language-sh">"cilium" has been added to your repositories
+...Successfully got an update from the "cilium" chart repository
+</code></pre>
+<h4 id="22-install-cilium-with-helm">2.2 Install Cilium with Helm</h4>
+<pre><code class="language-sh">helm install cilium cilium/cilium \
+  --namespace kube-system \
+  --set kubeProxyReplacement=true \
+  --set k8sServiceHost=my-k8s-control-plane \
+  --set k8sServicePort=6443 \
+  --set hubble.enabled=true \
+  --set hubble.relay.enabled=true \
+  --set hubble.ui.enabled=true \
+  --set l2announcements.enabled=true \
+  --set externalIPs.enabled=true \
+  --wait --timeout 5m
+</code></pre>
+<blockquote>
+<p><strong>Explanation of key flags:</strong></p>
+<ul>
+<li><code>kubeProxyReplacement=true</code> — Cilium fully replaces kube-proxy using eBPF</li>
+<li><code>k8sServiceHost</code> / <code>k8sServicePort</code> — tells Cilium how to reach the API server (required when kube-proxy is disabled)</li>
+<li><code>hubble.enabled=true</code> — enables the Hubble observability layer</li>
+<li><code>hubble.relay.enabled=true</code> — enables the Hubble Relay (required for the UI and CLI)</li>
+<li><code>hubble.ui.enabled=true</code> — deploys the Hubble web UI</li>
+<li><code>l2announcements.enabled=true</code> — enables L2 (ARP) announcements for LoadBalancer services (used in Task 10)</li>
+<li><code>externalIPs.enabled=true</code> — allows Cilium to handle external IP assignments (used in Task 10)</li>
+</ul>
+</blockquote>
+<p><strong>Expected Result:</strong></p>
+<p>Helm will install all Cilium components and wait for them to be ready.</p>
+<h4 id="23-verify-cilium-pods-are-running">2.3 Verify Cilium pods are running</h4>
+<pre><code class="language-sh">kubectl get pods -n kube-system -l app.kubernetes.io/part-of=cilium
+</code></pre>
+<p><strong>Expected Result:</strong></p>
+<p>You should see several pods running:</p>
+<ul>
+<li><code>cilium-*</code> (one per node — DaemonSet)</li>
+<li><code>cilium-operator-*</code></li>
+<li><code>hubble-relay-*</code></li>
+<li><code>hubble-ui-*</code></li>
+</ul>
+<h4 id="24-verify-nodes-are-ready">2.4 Verify nodes are Ready</h4>
+<pre><code class="language-sh">kubectl get nodes -o wide
+</code></pre>
+<p><strong>Expected Result:</strong></p>
+<p>All nodes should now show <code>Ready</code> status.</p>
+<pre><code class="language-sh">NAME                   STATUS   ROLES           AGE   VERSION
+my-k8s-control-plane   Ready    control-plane   2m    ...
+my-k8s-worker          Ready    &lt;none&gt;          2m    ...
+my-k8s-worker2         Ready    &lt;none&gt;          2m    ...
+</code></pre>
+<h4 id="25-validate-cilium-status-with-the-cli">2.5 Validate Cilium status with the CLI</h4>
+<pre><code class="language-sh">cilium status
+</code></pre>
+<p><strong>Expected Result:</strong></p>
+<p>All components should show green/OK. Look for:</p>
+<ul>
+<li><code>Cilium: OK</code></li>
+<li><code>Operator: OK</code></li>
+<li><code>Hubble Relay: OK</code></li>
+<li><code>KubeProxyReplacement: True</code></li>
+</ul>
+<hr/>
+<h3 id="task-3-verify-hubble-and-access-the-hubble-ui">Task 3: Verify Hubble and Access the Hubble UI</h3>
+<p>Hubble provides deep visibility into the network traffic flowing through your cluster. In this task, you will verify Hubble is working and access the Hubble UI from your remote workstation.</p>
+<h4 id="31-verify-hubble-status">3.1 Verify Hubble status</h4>
+<pre><code class="language-sh">cilium hubble port-forward &amp;
+hubble status
+</code></pre>
+<p><strong>Expected Result:</strong></p>
+<pre><code class="language-sh">Healthcheck (via localhost:4245): Ok
+...
+</code></pre>
+<h4 id="32-observe-live-traffic-with-hubble-cli">3.2 Observe live traffic with Hubble CLI</h4>
+<pre><code class="language-sh">hubble observe --last 10
+</code></pre>
+<p>This will show the most recent 10 network flows observed by Hubble across the cluster.</p>
+<p><strong>Expected Result:</strong></p>
+<p>You should see flows related to Cilium health checks and CoreDNS activity.</p>
+<h4 id="33-access-the-hubble-ui-via-kubectl-port-forward">3.3 Access the Hubble UI via kubectl port-forward</h4>
+<p>To access the Hubble web UI from the Jumphost browser, use kubectl port forwarding:</p>
+<pre><code class="language-sh">kubectl port-forward -n kube-system svc/hubble-ui 12000:80 --address 0.0.0.0 &amp;
+</code></pre>
+<blockquote>
+<p><strong>Note:</strong> The <code>--address 0.0.0.0</code> flag makes the forwarded port accessible from remote machines (the Jumphost), not just localhost.</p>
+</blockquote>
+<p>From the Jumphost browser, navigate to:</p>
+<pre><code class="language-text">http://198.18.128.50:12000
+</code></pre>
+<p><strong>Expected Result:</strong></p>
+<p>The Hubble UI loads and shows a service map of your cluster. At this point, you will only see system namespaces (e.g., <code>kube-system</code>).</p>
+<blockquote>
+<p><strong>Tip:</strong> You can also add a bookmark named <code>Hubble UI</code> in Chrome for quick access during the rest of the lab.</p>
+</blockquote>
+<hr/>
+<h3 id="task-4-deploy-sample-workloads">Task 4: Deploy Sample Workloads</h3>
+<p>In this task, you will deploy workloads across two namespaces, similar to Lab 3, but this time you will also deploy the Lab 1 Express application to demonstrate L7 policy enforcement later.</p>
+<div class="mermaid">flowchart TD
+   subgraph node["KinD Cluster"]
+    subgraph demo-b["namespace: demo-b"]
+      pod-b(nginx-b)
+    end
+    subgraph demo-a["namespace: demo-a"]
+      pod-a(nginx-a)
+      pod-express(lab1-express)
+    end
+  end
+</div>
+<h4 id="41-create-namespaces">4.1 Create namespaces</h4>
+<pre><code class="language-sh">kubectl create ns demo-a
+kubectl create ns demo-b
+</code></pre>
+<p>Label the namespaces:</p>
+<pre><code class="language-sh">kubectl label ns demo-a name=demo-a
+kubectl label ns demo-b name=demo-b
+</code></pre>
+<h4 id="42-load-the-lab-1-express-image-into-kind">4.2 Load the Lab 1 Express image into KinD</h4>
+<pre><code class="language-sh">kind load docker-image lab1-express:1.0 --name my-k8s
+</code></pre>
+<h4 id="43-deploy-nginx-in-each-namespace">4.3 Deploy NGINX in each namespace</h4>
+<pre><code class="language-sh">kubectl create deployment nginx-a --image=nginx -n demo-a
+kubectl expose deployment nginx-a --port=80 -n demo-a
+
+kubectl create deployment nginx-b --image=nginx -n demo-b
+kubectl expose deployment nginx-b --port=80 -n demo-b
+</code></pre>
+<h4 id="44-deploy-the-express-app-in-demo-a">4.4 Deploy the Express app in demo-a</h4>
+<p>Create the manifest directory:</p>
+<pre><code class="language-sh">mkdir -p ~/workspace/k8s/lab4
+cd ~/workspace/k8s/lab4
+</code></pre>
+<p>Create <code>express-deployment.yaml</code>:</p>
+<pre><code class="language-yaml">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lab1-express
+  namespace: demo-a
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lab1-express
+  template:
+    metadata:
+      labels:
+        app: lab1-express
+    spec:
+      containers:
+        - name: express
+          image: lab1-express:1.0
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lab1-express-svc
+  namespace: demo-a
+spec:
+  selector:
+    app: lab1-express
+  ports:
+    - port: 3000
+      targetPort: 3000
+</code></pre>
+<p>Apply:</p>
+<pre><code class="language-sh">kubectl apply -f express-deployment.yaml
+</code></pre>
+<h4 id="45-verify-all-workloads">4.5 Verify all workloads</h4>
+<pre><code class="language-sh">kubectl get pods,svc -n demo-a
+kubectl get pods,svc -n demo-b
+</code></pre>
+<p><strong>Expected Result:</strong></p>
+<ul>
+<li><code>demo-a</code>: nginx-a pod + service, lab1-express pod + service</li>
+<li><code>demo-b</code>: nginx-b pod + service</li>
+</ul>
+<hr/>
+<h3 id="task-5-confirm-default-connectivity-no-policies">Task 5: Confirm Default Connectivity (No Policies)</h3>
+<p>Before applying any network policies, verify that all pods can communicate freely.</p>
+<div class="mermaid">flowchart LR
+  subgraph demo-a["namespace: demo-a"]
+    testpod(Testpod)--Port 80--&gt;nginxa(nginx-a)
+    testpod--Port 3000--&gt;express(lab1-express)
+  end
+  subgraph demo-b["namespace: demo-b"]
+    nginxb(nginx-b)
+  end
+  testpod--Port 80--&gt;nginxb
+  testpod--Port 53--&gt;kube(kube-dns)
+
+  style testpod fill:#4CAF50,color:#fff
+  style nginxa fill:#4CAF50,color:#fff
+  style express fill:#4CAF50,color:#fff
+  style nginxb fill:#4CAF50,color:#fff
+  style kube fill:#4CAF50,color:#fff
+</div>
+<blockquote>
+<p>All traffic is open by default — any pod can reach any other pod across all namespaces and ports.</p>
+</blockquote>
+<h4 id="51-test-cross-namespace-connectivity">5.1 Test cross-namespace connectivity</h4>
+<pre><code class="language-sh">kubectl run testpod --rm -ti --image=busybox --restart=Never -n demo-a -- /bin/sh
+</code></pre>
+<p>Inside the busybox shell:</p>
+<pre><code class="language-sh">wget -q --timeout=5 nginx-b.demo-b.svc.cluster.local -O -
+wget -q --timeout=5 lab1-express-svc.demo-a.svc.cluster.local:3000 -O -
+</code></pre>
+<p><strong>Expected Result:</strong></p>
+<p>Both requests succeed — NGINX HTML and Express greeting are returned.</p>
+<p>Type <code>exit</code> to leave the test pod.</p>
+<hr/>
+<h2 id="network-policies-with-cilium">Network Policies with Cilium</h2>
+<p>Cilium supports both <strong>standard Kubernetes NetworkPolicies</strong> (L3/L4) and its own <strong>CiliumNetworkPolicy</strong> CRD which adds L7 (HTTP, gRPC, Kafka) policy enforcement.</p>
+<p>In this section you will build the same policy stack from Lab 3, and then extend it with Cilium-native L7 policies.</p>
+<div class="mermaid">flowchart TB
+    subgraph demo-a["namespace: demo-a"]
+        subgraph k8s-policies["Standard k8s NetworkPolicies (L3/L4)"]
+            P1("🔴 deny-all\npodSelector: {}\nIngress + Egress")
+            P2("🟢 allow-dns-egress\npodSelector: {}\nEgress → :53")
+            P3("🔵 allow-nginx-a-ingress\npodSelector: nginx-a\nIngress ← :80")
+            P4("🟢 allow-http-egress\npodSelector: {}\nEgress → :80/:3000")
+        end
+        subgraph cilium-policies["CiliumNetworkPolicy (L3/L4 + L7)"]
+            P5("🟣 l7-express-policy\nIngress to lab1-express\nAllow GET / and GET /health only")
+        end
+    end
+</div>
+<blockquote>
+<p><strong>Important:</strong> The Express app ingress is handled <strong>exclusively</strong> by the CiliumNetworkPolicy, not by a standard NetworkPolicy. This ensures Cilium's L7 proxy is in the path and can inspect HTTP methods and paths. If both a standard NetworkPolicy and a CiliumNetworkPolicy allow the same traffic, the standard policy's L3/L4 allow can bypass the L7 proxy.</p>
+</blockquote>
+<h3 id="task-6-apply-a-default-deny-policy">Task 6: Apply a Default Deny Policy</h3>
+<p>Same as Lab 3, start with a deny-all baseline.</p>
+<h4 id="61-create-the-policies-directory">6.1 Create the policies directory</h4>
+<pre><code class="language-sh">mkdir -p ~/workspace/k8s/lab4/policies
+cd ~/workspace/k8s/lab4/policies
+</code></pre>
+<h4 id="62-create-a-deny-all-policy">6.2 Create a deny-all policy</h4>
+<p>Create <code>deny-all.yaml</code>:</p>
+<pre><code class="language-yaml">apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-all
+  namespace: demo-a
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+    - Egress
+</code></pre>
+<p>Apply:</p>
+<pre><code class="language-sh">kubectl apply -f deny-all.yaml
+</code></pre>
+<h4 id="63-verify-the-policy">6.3 Verify the policy</h4>
+<pre><code class="language-sh">kubectl describe networkpolicy default-deny-all -n demo-a
+</code></pre>
+<h4 id="64-test-connectivity-after-deny-all">6.4 Test connectivity after deny-all</h4>
+<div class="mermaid">flowchart LR
+  subgraph demo-a["namespace: demo-a"]
+    testpod(Testpod)--Egress Port 80--&gt;P1((Denied))--X--&gt;nginxa(nginx-a)
+    testpod--Egress Port 3000--&gt;P2((Denied))--X--&gt;express(lab1-express)
+  end
+  subgraph demo-b["namespace: demo-b"]
+    nginxb(nginx-b)
+  end
+  testpod--Egress Port 80--&gt;P3((Denied))--X--&gt;nginxb
+  testpod--Egress Port 53--&gt;P4((Denied))--X--&gt;kube(kube-dns)
+</div>
+<blockquote>
+<p>After <code>deny-all</code>, every connection attempt is blocked — including DNS resolution.</p>
+</blockquote>
+<pre><code class="language-sh">kubectl run testpod --rm -ti --image=busybox --restart=Never -n demo-a -- /bin/sh
+</code></pre>
+<p>Inside the shell:</p>
+<pre><code class="language-sh">nslookup nginx-a.demo-a.svc.cluster.local
+wget -qO- --timeout=5 nginx-b.demo-b.svc.cluster.local
+</code></pre>
+<p><strong>Expected Result:</strong></p>
+<p>Both DNS resolution and HTTP requests fail — all traffic is blocked.</p>
+<p>Type <code>exit</code> to leave the test pod.</p>
+<hr/>
+<h3 id="task-7-allow-egress-to-dns-service">Task 7: Allow Egress to DNS Service</h3>
+<h4 id="71-create-the-allow-dns-policy">7.1 Create the allow-dns policy</h4>
+<p>Create <code>allow-dns-egress.yaml</code>:</p>
+<pre><code class="language-yaml">apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-dns-egress
+  namespace: demo-a
+spec:
+  podSelector: {}
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+</code></pre>
+<p>Apply:</p>
+<pre><code class="language-sh">kubectl apply -f allow-dns-egress.yaml
+</code></pre>
+<h4 id="72-validate-dns-works">7.2 Validate DNS works</h4>
+<div class="mermaid">flowchart LR
+  subgraph demo-a["namespace: demo-a"]
+    testpod(Testpod)--Egress Port 53--&gt;P1((Allow))--DNS--&gt;kube(kube-dns)
+    testpod--Egress Port 80--&gt;P2((Denied))--X--&gt;nginxa(nginx-a)
+    testpod--Egress Port 3000--&gt;P3((Denied))--X--&gt;express(lab1-express)
+  end
+  subgraph demo-b["namespace: demo-b"]
+    nginxb(nginx-b)
+  end
+  testpod--Egress Port 80--&gt;P4((Denied))--X--&gt;nginxb
+</div>
+<blockquote>
+<p>DNS is now allowed, but all HTTP traffic remains blocked.</p>
+</blockquote>
+<pre><code class="language-sh">kubectl run testpod --rm -ti --image=busybox --restart=Never -n demo-a -- /bin/sh
+</code></pre>
+<p>Inside the shell:</p>
+<pre><code class="language-sh">nslookup nginx-a.demo-a.svc.cluster.local
+</code></pre>
+<p><strong>Expected Result:</strong></p>
+<p>DNS resolution succeeds, but HTTP requests still fail (no egress rule for port 80 yet).</p>
+<p>Type <code>exit</code> to leave the test pod.</p>
+<hr/>
+<h3 id="task-8-allow-ingress-and-http-egress">Task 8: Allow Ingress and HTTP Egress</h3>
+<h4 id="81-create-an-ingress-policy-for-nginx-a">8.1 Create an ingress policy for nginx-a</h4>
+<p>Create <code>allow-nginx-a-ingress.yaml</code>:</p>
+<pre><code class="language-yaml">apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-nginx-a-ingress
+  namespace: demo-a
+spec:
+  podSelector:
+    matchLabels:
+      app: nginx-a
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: demo-a
+      ports:
+        - protocol: TCP
+          port: 80
+</code></pre>
+<p>Apply:</p>
+<pre><code class="language-sh">kubectl apply -f allow-nginx-a-ingress.yaml
+</code></pre>
+<blockquote>
+<p><strong>Note:</strong> We are intentionally <em>not</em> creating a standard NetworkPolicy for the Express app's ingress here. The Express app ingress will be managed by a <strong>CiliumNetworkPolicy</strong> in Task 9, which provides both L3/L4 and L7 (HTTP-aware) filtering in a single policy. If we created a standard NetworkPolicy allowing port 3000, it would bypass Cilium's L7 proxy.</p>
+</blockquote>
+<h4 id="82-create-an-http-egress-policy">8.2 Create an HTTP egress policy</h4>
+<p>Create <code>allow-http-egress.yaml</code>:</p>
+<pre><code class="language-yaml">apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-http-egress
+  namespace: demo-a
+spec:
+  podSelector: {}
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              name: demo-a
+      ports:
+        - protocol: TCP
+          port: 80
+        - protocol: TCP
+          port: 443
+        - protocol: TCP
+          port: 3000
+</code></pre>
+<p>Apply:</p>
+<pre><code class="language-sh">kubectl apply -f allow-http-egress.yaml
+</code></pre>
+<h4 id="83-validate-the-l3l4-policy-stack">8.3 Validate the L3/L4 policy stack</h4>
+<div class="mermaid">flowchart LR
+  subgraph demo-a["namespace: demo-a"]
+    testpod(Testpod)--Egress Port 53--&gt;P1((Allow))--DNS--&gt;kube(kube-dns)
+    testpod--Egress Port 80--&gt;P2((Allow))--Ingress Port 80--&gt;nginxa(nginx-a)
+    testpod--Egress Port 3000--&gt;P3((Allow))-.Ingress blocked.-&gt;express(lab1-express)
+  end
+  subgraph demo-b["namespace: demo-b"]
+    nginxb(nginx-b)
+  end
+  testpod--Egress Port 80--&gt;P4((Denied))--demo-b--&gt;nginxb
+</div>
+<blockquote>
+<p>DNS and nginx-a within <code>demo-a</code> are reachable. The Express app has <strong>egress allowed</strong> (port 3000) but <strong>no ingress policy yet</strong> — so connections will timeout. The Express ingress will be handled by a CiliumNetworkPolicy in Task 9. Cross-namespace traffic to <code>demo-b</code> remains blocked.</p>
+</blockquote>
+<pre><code class="language-sh">kubectl run testpod --rm -ti --image=busybox --restart=Never -n demo-a -- /bin/sh
+</code></pre>
+<p>Inside the shell:</p>
+<pre><code class="language-sh"># DNS should work
+nslookup nginx-a.demo-a.svc.cluster.local
+
+# Access to nginx-a in demo-a should work
+wget -q --timeout=5 nginx-a.demo-a.svc.cluster.local -O -
+
+# Access to Express app — should TIMEOUT (no ingress policy yet)
+wget -q --timeout=5 lab1-express-svc.demo-a.svc.cluster.local:3000 -O -
+
+# Access to demo-b should still be BLOCKED
+wget -qO- --timeout=5 nginx-b.demo-b.svc.cluster.local
+</code></pre>
+<p><strong>Expected Result:</strong></p>
+<ul>
+<li>DNS: works</li>
+<li>nginx-a: works (NGINX welcome page)</li>
+<li>lab1-express: <strong>timeout</strong> (egress allowed, but no ingress policy on Express yet)</li>
+<li>nginx-b (cross-namespace): <strong>blocked</strong> (timeout)</li>
+</ul>
+<p>Type <code>exit</code> to leave the test pod.</p>
+<h4 id="84-review-the-policy-stack">8.4 Review the policy stack</h4>
+<pre><code class="language-sh">kubectl get networkpolicies -n demo-a
+</code></pre>
+<p><strong>Expected Result:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Policy</th>
+<th>Direction</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>default-deny-all</td>
+<td>Ingress/Egress</td>
+<td>Blanket deny, both directions, all pods</td>
+</tr>
+<tr>
+<td>allow-dns-egress</td>
+<td>Egress</td>
+<td>Allow DNS (port 53) to kube-system</td>
+</tr>
+<tr>
+<td>allow-nginx-a-ingress</td>
+<td>Ingress</td>
+<td>Allow ingress to nginx-a on port 80</td>
+</tr>
+<tr>
+<td>allow-http-egress</td>
+<td>Egress</td>
+<td>Allow HTTP/HTTPS/Express egress in demo-a</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Notice there is no ingress policy for the Express app yet. That will be handled by a CiliumNetworkPolicy in the next task.</p>
+</blockquote>
+<hr/>
+<h3 id="task-9-cilium-l7-http-policy-ciliumnetworkpolicy">Task 9: Cilium L7 HTTP Policy (CiliumNetworkPolicy)</h3>
+<p>This is where Cilium goes beyond what standard Kubernetes NetworkPolicies can do. A <strong>CiliumNetworkPolicy</strong> can inspect and filter traffic at the application layer (L7), allowing you to write rules based on HTTP methods, paths, and headers.</p>
+<blockquote>
+<p><strong>Why L7 policies matter:</strong> Standard NetworkPolicies only control <em>which pods</em> can talk to <em>which ports</em> (L3/L4). With Cilium L7 policies, you can say: "Allow GET requests to <code>/health</code> but deny POST requests to <code>/admin</code>." This provides much finer-grained security.</p>
+<p><strong>Why not use both?</strong> If a standard Kubernetes NetworkPolicy allows traffic to a port (L3/L4 allow), that allow takes effect at the network layer <em>before</em> Cilium's L7 proxy can inspect the HTTP content. The result: the L7 rules are bypassed and all HTTP methods/paths pass through. To enforce L7 filtering, the <strong>CiliumNetworkPolicy must be the sole ingress policy</strong> for that endpoint — which is why we did not create a standard <code>allow-express-ingress</code> NetworkPolicy in Task 8.</p>
+</blockquote>
+<h4 id="91-create-a-ciliumnetworkpolicy-for-the-express-app">9.1 Create a CiliumNetworkPolicy for the Express app</h4>
+<p>This single policy will handle <strong>both</strong> L3/L4 (who can connect) and L7 (what HTTP requests are allowed):</p>
+<p>Create <code>l7-express-policy.yaml</code>:</p>
+<pre><code class="language-yaml">apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: l7-express-policy
+  namespace: demo-a
+spec:
+  endpointSelector:
+    matchLabels:
+      app: lab1-express
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: demo-a
+      toPorts:
+        - ports:
+            - port: "3000"
+              protocol: TCP
+          rules:
+            http:
+              - method: "GET"
+                path: "/"
+              - method: "GET"
+                path: "/health"
+</code></pre>
+<blockquote>
+<p><strong>What this policy does:</strong></p>
+<ul>
+<li>Applies to pods with label <code>app: lab1-express</code></li>
+<li>Only allows ingress from pods in <code>demo-a</code></li>
+<li>Only allows <code>GET</code> requests to <code>/</code> and <code>/health</code> on port 3000</li>
+<li>Any other HTTP method (POST, PUT, DELETE) or path will be <strong>denied</strong></li>
+</ul>
+</blockquote>
+<p>Apply:</p>
+<pre><code class="language-sh">kubectl apply -f l7-express-policy.yaml
+</code></pre>
+<h4 id="92-verify-the-ciliumnetworkpolicy">9.2 Verify the CiliumNetworkPolicy</h4>
+<pre><code class="language-sh">kubectl get ciliumnetworkpolicies -n demo-a
+kubectl describe ciliumnetworkpolicy l7-express-policy -n demo-a
+</code></pre>
+<p><strong>Expected Result:</strong></p>
+<p>The policy should be listed and show the L7 HTTP rules.</p>
+<h4 id="93-test-allowed-requests-get-and-get-health">9.3 Test allowed requests (GET / and GET /health)</h4>
+<div class="mermaid">flowchart LR
+  subgraph demo-a["namespace: demo-a"]
+    subgraph l7["Cilium L7 Proxy"]
+      direction TB
+      R1("GET /  → ✅ Allow")
+      R2("GET /health → ✅ Allow")
+      R3("POST / → ❌ Deny")
+      R4("GET /admin → ❌ Deny")
+      R5("DELETE /health → ❌ Deny")
+    end
+    curlpod(curlpod)--Port 3000--&gt;l7--&gt;express(lab1-express)
+  end
+</div>
+<blockquote>
+<p>Cilium's L7 proxy inspects HTTP requests <strong>before</strong> they reach the application. Only <code>GET /</code> and <code>GET /health</code> pass through — all other methods and paths are denied with <code>403</code>.</p>
+</blockquote>
+<p>Deploy a <code>curl</code> pod for testing (busybox <code>wget</code> does not support custom HTTP methods easily):</p>
+<pre><code class="language-sh">kubectl run curlpod --rm -ti --image=curlimages/curl --restart=Never -n demo-a -- /bin/sh
+</code></pre>
+<p>Inside the curl pod:</p>
+<pre><code class="language-sh"># GET / — should succeed (200)
+curl -s -o /dev/null -w "%{http_code}" http://lab1-express-svc:3000/
+
+# GET /health — should succeed (200)
+curl -s -o /dev/null -w "%{http_code}" http://lab1-express-svc:3000/health
+</code></pre>
+<p><strong>Expected Result:</strong></p>
+<p>Both return <code>200</code>.</p>
+<h4 id="94-test-denied-requests-post-and-unknown-paths">9.4 Test denied requests (POST and unknown paths)</h4>
+<p>Still inside the curl pod:</p>
+<pre><code class="language-sh"># POST to / — should be DENIED (403)
+curl -s -o /dev/null -w "%{http_code}" -X POST http://lab1-express-svc:3000/
+
+# GET /admin — should be DENIED (403)
+curl -s -o /dev/null -w "%{http_code}" http://lab1-express-svc:3000/admin
+
+# DELETE /health — should be DENIED (403)
+curl -s -o /dev/null -w "%{http_code}" -X DELETE http://lab1-express-svc:3000/health
+</code></pre>
+<p><strong>Expected Result:</strong></p>
+<p>All three return <code>403</code> — Cilium's L7 proxy denies the requests before they reach the Express application.</p>
+<p>Type <code>exit</code> to leave the curl pod.</p>
+<blockquote>
+<p>This demonstrates the power of Cilium L7 policies: you can enforce application-layer security without modifying the application code.</p>
+</blockquote>
+<h4 id="95-observe-l7-drops-in-hubble">9.5 Observe L7 drops in Hubble</h4>
+<p>If you still have Hubble port-forwarding running, you can observe the denied flows:</p>
+<pre><code class="language-sh">hubble observe --namespace demo-a --verdict DROPPED --last 20
+</code></pre>
+<p><strong>Expected Result:</strong></p>
+<p>You should see entries showing HTTP requests that were dropped by the L7 policy, including the HTTP method and path.</p>
+<hr/>
+<h3 id="task-10-expose-the-secured-app-with-loadbalancer-and-l2-announcements">Task 10: Expose the Secured App with LoadBalancer and L2 Announcements</h3>
+<p>Now that your workloads are secured with both L3/L4 and L7 policies, it's time to expose them to the outside world using a production-like access model.</p>
+<p>In Lab 2, you used <code>NodePort</code> to expose services externally. Cilium supports a more robust approach using <strong>LoadBalancer</strong> services with <strong>L2 announcements</strong>. This allows Cilium to respond to ARP requests on the local network and assign external IPs to services — similar to MetalLB in L2 mode, but built directly into Cilium.</p>
+<div class="mermaid">flowchart LR
+  host["Host / Jumphost"]
+  host--"curl http://LB_IP"--&gt;lb["LoadBalancer Service\n(External IP)"]
+
+  subgraph kind["KinD Cluster"]
+    lb--&gt;cilium["Cilium L2\nARP Response"]
+    cilium--&gt;l7["L7 Proxy\nGET only"]
+    l7--&gt;express(lab1-express\nPort 3000)
+  end
+</div>
+<blockquote>
+<p>The full traffic path: external request → L2-announced LoadBalancer IP → Cilium → L3/L4 NetworkPolicy check → L7 HTTP policy check → Express app. Your security policies remain enforced even for externally-originated traffic.</p>
+</blockquote>
+<h4 id="101-create-a-ciliuml2announcementpolicy">10.1 Create a CiliumL2AnnouncementPolicy</h4>
+<p>Create <code>l2-announcement.yaml</code>:</p>
+<pre><code class="language-yaml">apiVersion: "cilium.io/v2alpha1"
+kind: CiliumL2AnnouncementPolicy
+metadata:
+  name: default-l2-policy
+spec:
+  interfaces:
+    - ^eth[0-9]+
+  externalIPs: true
+  loadBalancerIPs: true
+</code></pre>
+<p>Apply:</p>
+<pre><code class="language-sh">kubectl apply -f l2-announcement.yaml
+</code></pre>
+<h4 id="102-create-a-ciliumloadbalancerippool">10.2 Create a CiliumLoadBalancerIPPool</h4>
+<p>Create <code>lb-ip-pool.yaml</code>:</p>
+<pre><code class="language-yaml">apiVersion: "cilium.io/v2alpha1"
+kind: CiliumLoadBalancerIPPool
+metadata:
+  name: default-pool
+spec:
+  blocks:
+    - cidr: "172.18.255.200/28"
+</code></pre>
+<blockquote>
+<p><strong>Note:</strong> The <code>172.18.0.0/16</code> subnet is the default Docker bridge network used by KinD. We pick a small range (<code>172.18.255.200/28</code>) within it for LoadBalancer IPs to avoid conflicts. You can verify your KinD network with <code>docker network inspect kind</code>.</p>
+</blockquote>
+<p>Apply:</p>
+<pre><code class="language-sh">kubectl apply -f lb-ip-pool.yaml
+</code></pre>
+<h4 id="103-update-the-ciliumnetworkpolicy-to-allow-external-ingress">10.3 Update the CiliumNetworkPolicy to allow external ingress</h4>
+<p>The current <code>l7-express-policy</code> only permits ingress from pods within <code>demo-a</code>. LoadBalancer traffic originates from outside the cluster, so we need to update the policy to also allow external sources — while still enforcing L7 HTTP rules.</p>
+<p>Update <code>l7-express-policy.yaml</code> with an additional ingress rule:</p>
+<pre><code class="language-yaml">apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: l7-express-policy
+  namespace: demo-a
+spec:
+  endpointSelector:
+    matchLabels:
+      app: lab1-express
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: demo-a
+      toPorts:
+        - ports:
+            - port: "3000"
+              protocol: TCP
+          rules:
+            http:
+              - method: "GET"
+                path: "/"
+              - method: "GET"
+                path: "/health"
+    - fromEntities:
+        - world
+      toPorts:
+        - ports:
+            - port: "3000"
+              protocol: TCP
+          rules:
+            http:
+              - method: "GET"
+                path: "/"
+              - method: "GET"
+                path: "/health"
+</code></pre>
+<blockquote>
+<p><strong>What changed:</strong> A second ingress rule was added using <code>fromEntities: world</code>, which matches traffic originating from outside the cluster (e.g., via the LoadBalancer). The same L7 HTTP rules apply — only <code>GET /</code> and <code>GET /health</code> are allowed. This keeps all Express ingress under a single CiliumNetworkPolicy with consistent L7 enforcement.</p>
+</blockquote>
+<p>Apply:</p>
+<pre><code class="language-sh">kubectl apply -f l7-express-policy.yaml
+</code></pre>
+<h4 id="104-create-a-loadbalancer-service-for-the-express-app">10.4 Create a LoadBalancer Service for the Express app</h4>
+<p>Create <code>express-lb-svc.yaml</code>:</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: Service
+metadata:
+  name: lab1-express-lb
+  namespace: demo-a
+spec:
+  selector:
+    app: lab1-express
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 3000
+</code></pre>
+<p>Apply:</p>
+<pre><code class="language-sh">kubectl apply -f express-lb-svc.yaml
+</code></pre>
+<h4 id="105-verify-the-loadbalancer-ip-is-assigned">10.5 Verify the LoadBalancer IP is assigned</h4>
+<pre><code class="language-sh">kubectl get svc lab1-express-lb -n demo-a
+</code></pre>
+<p><strong>Expected Result:</strong></p>
+<p>The <code>EXTERNAL-IP</code> column should show an IP from the <code>172.18.255.200/28</code> pool (e.g., <code>172.18.255.200</code>).</p>
+<pre><code class="language-sh">NAME              TYPE           CLUSTER-IP     EXTERNAL-IP      PORT(S)        AGE
+lab1-express-lb   LoadBalancer   10.96.x.x      172.18.255.200   80:3xxxx/TCP   10s
+</code></pre>
+<h4 id="106-test-connectivity-via-the-loadbalancer-ip">10.6 Test connectivity via the LoadBalancer IP</h4>
+<pre><code class="language-sh">LB_IP=$(kubectl get svc lab1-express-lb -n demo-a -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+echo "LoadBalancer IP: $LB_IP"
+curl http://$LB_IP
+curl http://$LB_IP/health
+</code></pre>
+<p><strong>Expected Result:</strong></p>
+<pre><code class="language-sh">Hello from Express!
+Hostname: lab1-express-xxxxx
+Time: ...
+</code></pre>
+<h4 id="107-verify-l7-policies-still-apply-to-external-traffic">10.7 Verify L7 policies still apply to external traffic</h4>
+<p>The L7 CiliumNetworkPolicy should still enforce HTTP method restrictions, even for traffic coming through the LoadBalancer:</p>
+<pre><code class="language-sh"># GET / — should succeed (200)
+curl -s -o /dev/null -w "%{http_code}" http://$LB_IP/
+
+# POST / — should be DENIED (403)
+curl -s -o /dev/null -w "%{http_code}" -X POST http://$LB_IP/
+
+# GET /admin — should be DENIED (403)
+curl -s -o /dev/null -w "%{http_code}" http://$LB_IP/admin
+</code></pre>
+<p><strong>Expected Result:</strong></p>
+<ul>
+<li><code>GET /</code> → <code>200</code></li>
+<li><code>POST /</code> → <code>403</code></li>
+<li><code>GET /admin</code> → <code>403</code></li>
+</ul>
+<blockquote>
+<p>This confirms that your L7 security policies are enforced end-to-end, from external LoadBalancer access all the way down to the application layer.</p>
+</blockquote>
+<hr/>
+<h3 id="task-11-observe-traffic-in-hubble-ui">Task 11: Observe Traffic in Hubble UI</h3>
+<p>Now that you have active workloads, policies, and external access, open the Hubble UI to see the full picture.</p>
+<h4 id="111-ensure-port-forwarding-is-active">11.1 Ensure port-forwarding is active</h4>
+<p>If it is not already running:</p>
+<pre><code class="language-sh">kubectl port-forward -n kube-system svc/hubble-ui 12000:80 --address 0.0.0.0 &amp;
+</code></pre>
+<h4 id="112-open-hubble-ui">11.2 Open Hubble UI</h4>
+<p>From the Jumphost browser, navigate to:</p>
+<pre><code class="language-text">http://198.18.128.50:12000
+</code></pre>
+<h4 id="113-explore-the-service-map">11.3 Explore the Service Map</h4>
+<ol>
+<li>Select the <code>demo-a</code> namespace from the dropdown</li>
+<li>You should see a service map showing <code>nginx-a</code>, <code>lab1-express</code>, and any test pods</li>
+<li>Flows will show green (allowed) and red (dropped) traffic based on your policies</li>
+<li>Look for the LoadBalancer traffic coming from the <code>world</code> identity (external traffic)</li>
+</ol>
+<blockquote>
+<p><strong>Tip:</strong> Run some test pods and curl commands while watching the Hubble UI to see real-time traffic flow and policy enforcement.</p>
+</blockquote>
+<hr/>
+<h3 id="task-12-cleanup">Task 12: Cleanup</h3>
+<h4 id="121-delete-namespaces-and-policies">12.1 Delete namespaces and policies</h4>
+<pre><code class="language-sh">kubectl delete ns demo-a demo-b
+</code></pre>
+<h4 id="122-delete-the-l2-and-loadbalancer-resources">12.2 Delete the L2 and LoadBalancer resources</h4>
+<pre><code class="language-sh">cd ~/workspace/k8s/lab4
+kubectl delete -f l2-announcement.yaml
+kubectl delete -f lb-ip-pool.yaml
+</code></pre>
+<h4 id="123-destroy-the-kind-cluster">12.3 Destroy the KinD cluster</h4>
+<pre><code class="language-sh">kind delete cluster --name my-k8s
+</code></pre>
+<h4 id="124-confirm-cleanup">12.4 Confirm cleanup</h4>
+<pre><code class="language-sh">kind get clusters
+</code></pre>
+<p><strong>Expected Result:</strong></p>
+<p>No clusters listed.</p>
+<hr/>
+<h2 id="lab-completion">Lab Completion</h2>
+<p><strong>Congratulations! You have completed Lab 4!</strong></p>
+<ul>
+<li>
+<p>You created a KinD cluster without CNI and without kube-proxy, and installed Cilium as a full kube-proxy replacement using Helm.</p>
+</li>
+<li>
+<p>You built a complete L3/L4 NetworkPolicy stack (deny-all, allow-dns, allow-http) and extended it with Cilium's L7 HTTP-aware CiliumNetworkPolicy.</p>
+</li>
+<li>
+<p>You configured LoadBalancer services with L2 announcements — a production-like approach to external service access — and verified that L7 policies are enforced end-to-end, even for external traffic.</p>
+</li>
+<li>
+<p>You used Hubble to observe real-time traffic flows and policy enforcement visually.</p>
+</li>
+<li>
+<p>You now understand how Cilium goes beyond traditional CNIs by combining eBPF-powered networking, deep observability, and application-layer security.</p>
+</li>
+</ul>
+</article>
+</div>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+<div class="md-copyright__highlight">
+      Copyright © 2026 - Freddy Bello
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+<script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+<script type="module">import mermaid from "https://unpkg.com/mermaid@10.4.0/dist/mermaid.esm.min.mjs";
+mermaid.initialize({
+    theme: "dark",
+    themeVariables: {
+        primaryColor: "#07182d",
+        lineColor: "#02c8ff",
+        primaryBorderColor: "#02c8ff",
+        backgroundColor: "#07182d",
+        primaryTextColor: "#e7e7e7"
+    }
+});</script></body>
+</html>
