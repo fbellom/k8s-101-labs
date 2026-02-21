@@ -1,0 +1,60 @@
+:root {
+  color-scheme: light;
+
+  /* ---- Backgrounds ---- */
+  --bg: hsl(216, 20%, 95%);
+  --bg-dark: hsl(216, 15%, 88%);
+  --bg-light: hsl(0, 0%, 100%);
+
+  /* ---- Surfaces ---- */
+  --surface-1: hsl(0, 0%, 100%);
+  --surface-2: hsl(216, 18%, 96%);
+  --border-subtle: hsl(216, 14%, 85%);
+  --border-strong: hsl(216, 20%, 70%);
+
+  /* ---- Typography ---- */
+  --font-light: hsl(0, 0%, 5%);
+  --font-base: hsl(0, 0%, 20%);
+  --font-muted: hsl(0, 0%, 45%);
+
+  /* ---- Header ---- */
+  --header-grad-start: hsl(212.73, 9.09%, 23.73%);
+  --header-grad-end: hsl(204, 14.29%, 6.86%);
+  --header-gradient: linear-gradient(
+    90deg,
+    var(--header-grad-start),
+    var(--header-grad-end)
+  );
+
+  /* ---- Semantic Status ---- */
+  --color-healthy: hsl(142, 71%, 35%);
+  --color-healthy-muted: hsl(142, 45%, 90%);
+  --color-healthy-on: hsl(142, 80%, 25%);
+
+  --color-warning: hsl(38, 92%, 40%);
+  --color-warning-muted: hsl(38, 55%, 90%);
+  --color-warning-on: hsl(38, 90%, 28%);
+
+  --color-critical: hsl(0, 84%, 48%);
+  --color-critical-muted: hsl(0, 50%, 92%);
+  --color-critical-on: hsl(0, 85%, 35%);
+
+  --color-info: hsl(207, 90%, 42%);
+  --color-info-muted: hsl(207, 50%, 92%);
+  --color-info-on: hsl(207, 90%, 30%);
+
+  /* ---- Data Visualization Palette ---- */
+  --chart-1: hsl(207, 85%, 45%);
+  --chart-2: hsl(174, 65%, 38%);
+  --chart-3: hsl(142, 65%, 35%);
+  --chart-4: hsl(48, 90%, 42%);
+  --chart-5: hsl(27, 92%, 45%);
+  --chart-6: hsl(0, 78%, 50%);
+  --chart-7: hsl(265, 60%, 50%);
+  --chart-8: hsl(330, 65%, 50%);
+
+  /* ---- Shadows ---- */
+  --shadow-lifted-bg: hsla(216, 20%, 20%, 0.1);
+  --shadow-subtle-bg: hsla(216, 20%, 20%, 0.06);
+  --shadow-raised-bg: hsla(216, 20%, 20%, 0.14);
+}

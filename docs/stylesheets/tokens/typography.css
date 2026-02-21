@@ -1,0 +1,423 @@
+/* =========================
+   Font Face Declarations
+   Folder structure:
+   resources/fonts/Inter/*.ttf
+   resources/fonts/Roboto Mono/*.ttf
+   resources/fonts/Sharp Sans/*.woff2|.woff|.eot
+   ========================= */
+
+/* ---- Sharp Sans (Heading) ---- */
+@font-face {
+  font-family: "Sharp Sans";
+  src:
+    url("../typography/headings/SharpSans-Bold.woff2") format("woff2"),
+    url("../typography/headings/SharpSans-Bold.woff") format("woff"),
+    url("../typography/headings/SharpSans-Bold.eot");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ---- Inter (Body) ---- */
+@font-face {
+  font-family: "Inter";
+  src: url("../typography/sans/Inter-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("../typography/sans/Inter-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("../typography/sans/Inter-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ---- Roboto Mono (Monospace) ---- */
+@font-face {
+  font-family: "Roboto Mono";
+  src: url("../typography/monospace/RobotoMono-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Roboto Mono";
+  src: url("../typography/monospace/RobotoMono-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Roboto Mono";
+  src: url("../typography/monospace/RobotoMono-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* =========================
+   Font Stacks (from your reference)
+   ========================= */
+
+:root {
+  /* Families */
+  --font-heading:
+    "Sharp Sans", "Inter", -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, sans-serif;
+  --font-body:
+    "Inter", -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+    sans-serif;
+  --font-mono:
+    "Roboto Mono", ui-monospace, "Courier New", "Roboto Mono", Menlo, Monaco,
+    monospace;
+
+  /* Weights */
+  --fw-regular: 400;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+
+  /* Usage table mapping */
+  --fw-body: 400; /* Default body copy */
+  --fw-emphasis: 600; /* Emphasis in content */
+  --fw-link: 700; /* Text links */
+  --fw-button: 700; /* Button labels */
+  --fw-tablehead: 700; /* Table headings */
+
+  /* Headings */
+  --title-size: 24px;
+  --title-line: 34px;
+
+  --section-size: 18px;
+  --section-line: 24px;
+
+  --subsection-size: 16px;
+  --subsection-line: 22px;
+
+  --smallest-size: 14px;
+  --smallest-line: 20px;
+
+  /* Body */
+  --p1-size: 18px;
+  --p1-line: 24px;
+
+  --p2-size: 16px;
+  --p2-line: 22px;
+
+  --p3-size: 14px;
+  --p3-line: 20px;
+
+  --p4-size: 12px;
+  --p4-line: 18px;
+
+  /* Numerals (Large numerals) */
+  --n1-size: 60px;
+  --n1-line: 72px;
+
+  --n2-size: 48px;
+  --n2-line: 60px;
+
+  --n3-size: 40px;
+  --n3-line: 52px;
+
+  --n4-size: 32px;
+  --n4-line: 43px;
+
+  --n5-size: 24px;
+  --n5-line: 34px;
+
+  /* =========================
+     Semantic type roles (single-token “font” shorthands)
+     This lets components use: font: var(--type-body-2);
+     ========================= */
+  --type-title: var(--fw-bold) var(--title-size) / var(--title-line)
+    var(--font-heading);
+  --type-section: var(--fw-bold) var(--section-size) / var(--section-line)
+    var(--font-heading);
+  --type-subsection: var(--fw-bold) var(--subsection-size) /
+    var(--subsection-line) var(--font-heading);
+  --type-smallest: var(--fw-bold) var(--smallest-size) / var(--smallest-line)
+    var(--font-heading);
+
+  --type-body-1: var(--fw-body) var(--p1-size) / var(--p1-line) var(--font-body);
+  --type-body-2: var(--fw-body) var(--p2-size) / var(--p2-line) var(--font-body);
+  --type-body-3: var(--fw-body) var(--p3-size) / var(--p3-line) var(--font-body);
+  --type-body-4: var(--fw-body) var(--p4-size) / var(--p4-line) var(--font-body);
+
+  --type-emphasis: var(--fw-emphasis) var(--p2-size) / var(--p2-line)
+    var(--font-body);
+  --type-link: var(--fw-link) var(--p4-size) / var(--p4-line) var(--font-body);
+  --type-button: var(--fw-button) var(--p2-size) / var(--p2-line)
+    var(--font-body);
+
+  --type-mono-2: var(--fw-regular) var(--p2-size) / var(--p2-line)
+    var(--font-mono);
+  --type-mono-3: var(--fw-regular) var(--p3-size) / var(--p3-line)
+    var(--font-mono);
+
+  --type-n1: var(--fw-bold) var(--n1-size) / var(--n1-line) var(--font-heading);
+  --type-n2: var(--fw-bold) var(--n2-size) / var(--n2-line) var(--font-heading);
+  --type-n3: var(--fw-bold) var(--n3-size) / var(--n3-line) var(--font-heading);
+  --type-n4: var(--fw-bold) var(--n4-size) / var(--n4-line) var(--font-heading);
+  --type-n5: var(--fw-bold) var(--n5-size) / var(--n5-line) var(--font-heading);
+
+  --type-card-title: var(--fw-bold) var(--p2-size) / var(--p2-line)
+    var(--font-body);
+  --type-card-section: var(--fw-bold) var(--p4-size) / var(--p4-line)
+    var(--font-body);
+}
+
+/* =========================
+   Global defaults
+   ========================= */
+
+/* =========================
+   Heading utilities (Sharp Sans 700)
+   ========================= */
+
+.t-title {
+  font-family: var(--font-heading);
+  font-weight: var(--fw-bold);
+  font-size: var(--title-size);
+  line-height: var(--title-line);
+  letter-spacing: 0;
+  margin: 0;
+}
+
+.t-section {
+  font-family: var(--font-heading);
+  font-weight: var(--fw-bold);
+  font-size: var(--section-size);
+  line-height: var(--section-line);
+  letter-spacing: 0;
+  margin: 0;
+}
+
+.t-subsection {
+  font-family: var(--font-heading);
+  font-weight: var(--fw-bold);
+  font-size: var(--subsection-size);
+  line-height: var(--subsection-line);
+  letter-spacing: 0;
+  margin: 0;
+}
+
+.t-smallest {
+  font-family: var(--font-heading);
+  font-weight: var(--fw-bold);
+  font-size: var(--smallest-size);
+  line-height: var(--smallest-line);
+  letter-spacing: 0;
+  margin: 0;
+}
+
+/* =========================
+   Body utilities (Inter)
+   ========================= */
+
+.t-p1 {
+  font-family: var(--font-body);
+  font-weight: var(--fw-body);
+  font-size: var(--p1-size);
+  line-height: var(--p1-line);
+  letter-spacing: 0;
+  margin: 0;
+}
+
+.t-p2 {
+  font-family: var(--font-body);
+  font-weight: var(--fw-body);
+  font-size: var(--p2-size);
+  line-height: var(--p2-line);
+  letter-spacing: 0;
+  margin: 0;
+}
+
+.t-p3 {
+  font-family: var(--font-body);
+  font-weight: var(--fw-body);
+  font-size: var(--p3-size);
+  line-height: var(--p3-line);
+  letter-spacing: 0;
+  margin: 0;
+}
+
+.t-p4 {
+  font-family: var(--font-body);
+  font-weight: var(--fw-body);
+  font-size: var(--p4-size);
+  line-height: var(--p4-line);
+  letter-spacing: 0;
+  margin: 0;
+}
+
+/* Emphasis (Inter 600) */
+.t-em {
+  font-family: var(--font-body);
+  font-weight: var(--fw-emphasis);
+}
+
+/* Link text (Inter 700) */
+.t-link {
+  font-family: var(--font-body);
+  font-weight: var(--fw-link);
+}
+
+/* Button label (Inter 700) */
+.t-btn {
+  font-family: var(--font-body);
+  font-weight: var(--fw-button);
+}
+
+/* Cards */
+.t-card-title {
+  font-family: var(--font-body);
+  font-weight: var(--fw-bold);
+  font-size: var(--p2-size);
+  line-height: var(--p2-line);
+  letter-spacing: 0;
+  margin: 0;
+  color: var(--text);
+}
+
+.t-card-subtitle {
+  font-family: var(--font-body);
+  font-weight: var(--fw-body);
+  font-size: var(--p3-size);
+  line-height: var(--p3-line);
+  letter-spacing: 0;
+  margin: 0;
+  color: var(--text-muted);
+}
+
+/* =========================
+   Monospace utilities
+   ========================= */
+
+.t-m1 {
+  font-family: var(--font-mono);
+  font-weight: var(--fw-regular);
+  font-size: var(--p1-size);
+  line-height: var(--p1-line);
+  margin: 0;
+}
+.t-m2 {
+  font-family: var(--font-mono);
+  font-weight: var(--fw-regular);
+  font-size: var(--p2-size);
+  line-height: var(--p2-line);
+  margin: 0;
+}
+.t-m3 {
+  font-family: var(--font-mono);
+  font-weight: var(--fw-regular);
+  font-size: var(--p3-size);
+  line-height: var(--p3-line);
+  margin: 0;
+}
+.t-m4 {
+  font-family: var(--font-mono);
+  font-weight: var(--fw-regular);
+  font-size: var(--p4-size);
+  line-height: var(--p4-line);
+  margin: 0;
+}
+
+.t-m1-sb {
+  font-family: var(--font-mono);
+  font-weight: var(--fw-semibold);
+  font-size: var(--p1-size);
+  line-height: var(--p1-line);
+  margin: 0;
+}
+.t-m2-sb {
+  font-family: var(--font-mono);
+  font-weight: var(--fw-semibold);
+  font-size: var(--p2-size);
+  line-height: var(--p2-line);
+  margin: 0;
+}
+.t-m3-sb {
+  font-family: var(--font-mono);
+  font-weight: var(--fw-semibold);
+  font-size: var(--p3-size);
+  line-height: var(--p3-line);
+  margin: 0;
+}
+.t-m4-sb {
+  font-family: var(--font-mono);
+  font-weight: var(--fw-semibold);
+  font-size: var(--p4-size);
+  line-height: var(--p4-line);
+  margin: 0;
+}
+
+.t-m2-b {
+  font-family: var(--font-mono);
+  font-weight: var(--fw-bold);
+  font-size: var(--p2-size);
+  line-height: var(--p2-line);
+  margin: 0;
+}
+.t-m3-b {
+  font-family: var(--font-mono);
+  font-weight: var(--fw-bold);
+  font-size: var(--p3-size);
+  line-height: var(--p3-line);
+  margin: 0;
+}
+.t-m4-b {
+  font-family: var(--font-mono);
+  font-weight: var(--fw-bold);
+  font-size: var(--p4-size);
+  line-height: var(--p4-line);
+  margin: 0;
+}
+
+/* =========================
+   Numeral utilities (Sharp Sans 700)
+   ========================= */
+
+.t-n1 {
+  font-family: var(--font-heading);
+  font-weight: var(--fw-bold);
+  font-size: var(--n1-size);
+  line-height: var(--n1-line);
+  margin: 0;
+}
+.t-n2 {
+  font-family: var(--font-heading);
+  font-weight: var(--fw-bold);
+  font-size: var(--n2-size);
+  line-height: var(--n2-line);
+  margin: 0;
+}
+.t-n3 {
+  font-family: var(--font-heading);
+  font-weight: var(--fw-bold);
+  font-size: var(--n3-size);
+  line-height: var(--n3-line);
+  margin: 0;
+}
+.t-n4 {
+  font-family: var(--font-heading);
+  font-weight: var(--fw-bold);
+  font-size: var(--n4-size);
+  line-height: var(--n4-line);
+  margin: 0;
+}
+.t-n5 {
+  font-family: var(--font-heading);
+  font-weight: var(--fw-bold);
+  font-size: var(--n5-size);
+  line-height: var(--n5-line);
+  margin: 0;
+}

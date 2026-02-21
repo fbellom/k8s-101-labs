@@ -1,0 +1,64 @@
+@import url(tokens/typography.css);
+@import url(tokens/color.palette.css);
+
+:root {
+  --md-text-font: var(--font-body);
+  --md-code-font: var(--font-mono);
+  --md-code-fg-color: var(--color-info);
+  --md-code-bg-color: var(--bg-light);
+  --md-typeset-a-color: var(--font-base);
+}
+
+html {
+  font-size: 1.5em;
+  color: var(--font-base);
+  font-weight: var(--font-body);
+}
+
+body {
+  background: var(--bg);
+  color: var(--font-base);
+  font-weight: var(--font-body);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-heading);
+  color: var(--font-light);
+}
+
+.md-typeset code {
+  font-family: var(--font-mono);
+  font-size: 1em;
+  background: var(--surface-1);
+  border-radius: 4px;
+  border: 2px solid var(--border-subtle);
+  box-shadow: var(--shadow-raised-bg);
+}
+
+.md-typeset img {
+  border-radius: 8px;
+  border: 2px solid var(--border-subtle);
+  box-shadow: var(--shadow-raised-bg);
+}
+
+[data-md-color-primary="black"] .md-header {
+  background: var(--header-gradient);
+}
+
+.mermaid {
+  display: flex;
+  justify-content: center; /* horizontal */
+  align-items: center; /* vertical */
+  border-radius: 8px;
+  border: 2px solid var(--border-subtle);
+  box-shadow: var(--shadow-raised-bg);
+  align-items: center;
+}
+
+.mermaid svg {
+  max-width: 100%;
+  height: auto;
+}
