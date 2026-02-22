@@ -7,6 +7,11 @@
   --md-code-fg-color: var(--color-info);
   --md-code-bg-color: var(--bg-light);
   --md-typeset-a-color: var(--font-base);
+
+  /* Mermaid */
+  --md-mermaid-node-bg-color: var(--bg-light);
+  --md-mermaid-node-fg-color: var(--font-base);
+  --md-mermaid-line-color: var(--color-healthy);
 }
 
 html {
@@ -47,6 +52,8 @@ h4 {
 [data-md-color-primary="black"] .md-header {
   background: var(--header-gradient);
 }
+
+/* Mermaid Specifics */
 
 .mermaid {
   display: flex;
