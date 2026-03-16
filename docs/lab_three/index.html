@@ -1567,16 +1567,16 @@ The request is still blocked — because no policy allows it.</p>
 <p>Remove the sample network policies and test namespaces.</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-38-1"><a href="#__codelineno-38-1" id="__codelineno-38-1" name="__codelineno-38-1"></a>kubectl<span class="w"> </span>delete<span class="w"> </span>ns<span class="w"> </span>demo-a<span class="w"> </span>demo-b
 </span></code></pre></div>
-<p><strong>Expected Result:</strong></p>
-<p>Both namespaces and all policies are deleted, returning the cluster to its previous state.</p>
+<p><strong>Expected Result:</strong>
+Both namespaces and all policies are deleted, returning the cluster to its previous state.</p>
 <p>Remove the kind cluster</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-39-1"><a href="#__codelineno-39-1" id="__codelineno-39-1" name="__codelineno-39-1"></a>kind<span class="w"> </span>delete<span class="w"> </span>cluster<span class="w"> </span>--name<span class="w"> </span>my-k8s
 </span></code></pre></div>
-<p><strong>Expected Result:</strong></p>
-<p>Cluster is removed</p>
+<p><strong>Expected Result:</strong>
+Cluster is removed</p>
 <hr/>
 <h2 id="lab-completion">Lab Completion</h2>
-<p><strong>Congratulations! You have completed Lab 3</strong></p>
+<p>Congratulations! You have completed Lab 3!!</p>
 <ul>
 <li>
 <p>You installed Calico networking, deployed workloads, and implemented Kubernetes L3/L4 Native NetworkPolicies to secure traffic between pods.</p>

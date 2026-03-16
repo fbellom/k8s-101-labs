@@ -1027,16 +1027,23 @@
 </span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="nb">cd</span><span class="w"> </span>html5/lab1-express
 </span></code></pre></div>
 <h4 id="12-initialize-the-nodejs-project">1.2 Initialize the Node.JS project</h4>
+<p>Run:</p>
 <div class="language-sh highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a>npm<span class="w"> </span>init<span class="w"> </span>-y
 </span></code></pre></div>
+<p>This will create a file name <code>package.json</code> which includes all the denpendencies for a project. This file is important to help recreating the app once you move it into a container. The file looks like this output</p>
 <p><img alt="npm_init" src="../img/lab_1/task_1_2_npm.yaml.png"/></p>
 <div class="language-sh highlight"><pre><span></span><code><span id="__span-2-1"><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a>npm<span class="w"> </span>install<span class="w"> </span>express
 </span></code></pre></div>
+<p>This will install the ExpressJS library into the environment. This library will serve the content of our project as a web server.</p>
 <p><img alt="express_install" src="../img/lab_1/task_1_2_express.yaml.png"/></p>
 <p><strong>Expected Result:</strong></p>
 <p>A <code>package.json</code> file is created and Express is installed under <code>node_modules/</code></p>
 <p><img alt="lab_folder" src="../img/lab_1/task_1_2_outcome.yaml.png"/></p>
+<mark class="critic block">
+<p>What do you see if you type <code>cat package.json</code>?</p>
+</mark>
 <h4 id="13-create-the-application-server">1.3 Create the application server</h4>
+<p>In Node, an application server means a middleware use to render the content (HTML, CSS, JavaScript) to the web browser. In this task we are creating an ExpressJS application server to render our API.</p>
 <p>In the vscode server in chrome, create a file named <code>server.js</code></p>
 <div class="language-js highlight"><pre><span></span><code><span id="__span-3-1"><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">express</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">"express"</span><span class="p">);</span>
 </span><span id="__span-3-2"><a href="#__codelineno-3-2" id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="kd">const</span><span class="w"> </span><span class="nx">os</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">"os"</span><span class="p">);</span>
@@ -1064,10 +1071,14 @@
 </span></code></pre></div>
 <p><img alt="vscode_server" src="../img/lab_1/task_1_3_server_js.png"/></p>
 <h4 id="14-run-a-quick-local-test-optional">1.4 Run a quick local test (optional)</h4>
+<p>As mentioned, Node allows to run javascript code as a server-side process, in order to do that just use <code>node YOUR_CODE_FILE.js</code>. In this case we are going to test our recently created application server.</p>
 <div class="language-sh highlight"><pre><span></span><code><span id="__span-4-1"><a href="#__codelineno-4-1" id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="w"> </span>node<span class="w"> </span>server.js
 </span></code></pre></div>
 <p><img alt="run_server" src="../img/lab_1/task_1_4_run_server_js.png"/></p>
-<p>In code-server open a second terminal,</p>
+<mark class="critic block">
+<p>Note that an application is listening at port 3000 is active. That means our service is running. Which line of code set the port 3000 in server.js file?</p>
+</mark>
+<p>Now let's validate that server is responding. In code-server open a second terminal,</p>
 <p><img alt="new_terminal" src="../img/lab_1/task_1_4_open_new_terminal.png"/></p>
 <p>run:</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a href="#__codelineno-5-1" id="__codelineno-5-1" name="__codelineno-5-1"></a>curl<span class="w"> </span>http://localhost:3000
@@ -1100,44 +1111,63 @@
   class code,deps k8s_nodes;
 </div>
 <h4 id="21-create-the-dockerfile">2.1 Create the Dockerfile</h4>
+<p>A <code>Dockerfile</code> is like a blueprint including all the specs needed to create a container image. It defines OS, dependencies, software configuration and application code needed to run an application consistently.</p>
 <p>In the same directory, create <code>Dockerfile</code></p>
-<div class="language-dockerfile highlight"><pre><span></span><code><span id="__span-8-1"><a href="#__codelineno-8-1" id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="k">FROM</span><span class="w"> </span><span class="s">node:20-alpine</span>
-</span><span id="__span-8-2"><a href="#__codelineno-8-2" id="__codelineno-8-2" name="__codelineno-8-2"></a>
-</span><span id="__span-8-3"><a href="#__codelineno-8-3" id="__codelineno-8-3" name="__codelineno-8-3"></a><span class="k">WORKDIR</span><span class="w"> </span><span class="s">/app</span>
-</span><span id="__span-8-4"><a href="#__codelineno-8-4" id="__codelineno-8-4" name="__codelineno-8-4"></a>
-</span><span id="__span-8-5"><a href="#__codelineno-8-5" id="__codelineno-8-5" name="__codelineno-8-5"></a><span class="k">COPY</span><span class="w"> </span>package*.json<span class="w"> </span>./
-</span><span id="__span-8-6"><a href="#__codelineno-8-6" id="__codelineno-8-6" name="__codelineno-8-6"></a><span class="k">RUN</span><span class="w"> </span>npm<span class="w"> </span>i
-</span><span id="__span-8-7"><a href="#__codelineno-8-7" id="__codelineno-8-7" name="__codelineno-8-7"></a>
-</span><span id="__span-8-8"><a href="#__codelineno-8-8" id="__codelineno-8-8" name="__codelineno-8-8"></a><span class="k">COPY</span><span class="w"> </span>server.js<span class="w"> </span>./
-</span><span id="__span-8-9"><a href="#__codelineno-8-9" id="__codelineno-8-9" name="__codelineno-8-9"></a>
-</span><span id="__span-8-10"><a href="#__codelineno-8-10" id="__codelineno-8-10" name="__codelineno-8-10"></a><span class="k">ENV</span><span class="w"> </span><span class="nv">PORT</span><span class="o">=</span><span class="m">3000</span>
-</span><span id="__span-8-11"><a href="#__codelineno-8-11" id="__codelineno-8-11" name="__codelineno-8-11"></a><span class="k">EXPOSE</span><span class="w"> </span><span class="s">3000</span>
-</span><span id="__span-8-12"><a href="#__codelineno-8-12" id="__codelineno-8-12" name="__codelineno-8-12"></a>
-</span><span id="__span-8-13"><a href="#__codelineno-8-13" id="__codelineno-8-13" name="__codelineno-8-13"></a><span class="k">CMD</span><span class="w"> </span><span class="p">[</span><span class="s2">"node"</span><span class="p">,</span><span class="w"> </span><span class="s2">"server.js"</span><span class="p">]</span>
+<div class="language-dockerfile highlight"><pre><span></span><code><span id="__span-8-1"><a href="#__codelineno-8-1" id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="c">#Base Image with OS</span>
+</span><span id="__span-8-2"><a href="#__codelineno-8-2" id="__codelineno-8-2" name="__codelineno-8-2"></a><span class="k">FROM</span><span class="w"> </span><span class="s">node:20-alpine</span>
+</span><span id="__span-8-3"><a href="#__codelineno-8-3" id="__codelineno-8-3" name="__codelineno-8-3"></a>
+</span><span id="__span-8-4"><a href="#__codelineno-8-4" id="__codelineno-8-4" name="__codelineno-8-4"></a><span class="c">#Base Folder fro the app inside the container</span>
+</span><span id="__span-8-5"><a href="#__codelineno-8-5" id="__codelineno-8-5" name="__codelineno-8-5"></a><span class="k">WORKDIR</span><span class="w"> </span><span class="s">/app</span>
+</span><span id="__span-8-6"><a href="#__codelineno-8-6" id="__codelineno-8-6" name="__codelineno-8-6"></a>
+</span><span id="__span-8-7"><a href="#__codelineno-8-7" id="__codelineno-8-7" name="__codelineno-8-7"></a><span class="c">#The file with all the app</span>
+</span><span id="__span-8-8"><a href="#__codelineno-8-8" id="__codelineno-8-8" name="__codelineno-8-8"></a><span class="k">COPY</span><span class="w"> </span>package*.json<span class="w"> </span>./
+</span><span id="__span-8-9"><a href="#__codelineno-8-9" id="__codelineno-8-9" name="__codelineno-8-9"></a><span class="k">RUN</span><span class="w"> </span>npm<span class="w"> </span>i
+</span><span id="__span-8-10"><a href="#__codelineno-8-10" id="__codelineno-8-10" name="__codelineno-8-10"></a>
+</span><span id="__span-8-11"><a href="#__codelineno-8-11" id="__codelineno-8-11" name="__codelineno-8-11"></a><span class="c">#The Application File</span>
+</span><span id="__span-8-12"><a href="#__codelineno-8-12" id="__codelineno-8-12" name="__codelineno-8-12"></a><span class="k">COPY</span><span class="w"> </span>server.js<span class="w"> </span>./
+</span><span id="__span-8-13"><a href="#__codelineno-8-13" id="__codelineno-8-13" name="__codelineno-8-13"></a>
+</span><span id="__span-8-14"><a href="#__codelineno-8-14" id="__codelineno-8-14" name="__codelineno-8-14"></a><span class="c">#Environmental Vars needed by the app</span>
+</span><span id="__span-8-15"><a href="#__codelineno-8-15" id="__codelineno-8-15" name="__codelineno-8-15"></a><span class="k">ENV</span><span class="w"> </span><span class="nv">PORT</span><span class="o">=</span><span class="m">3000</span>
+</span><span id="__span-8-16"><a href="#__codelineno-8-16" id="__codelineno-8-16" name="__codelineno-8-16"></a>
+</span><span id="__span-8-17"><a href="#__codelineno-8-17" id="__codelineno-8-17" name="__codelineno-8-17"></a><span class="c">#Networking Port exposed by the Container</span>
+</span><span id="__span-8-18"><a href="#__codelineno-8-18" id="__codelineno-8-18" name="__codelineno-8-18"></a><span class="k">EXPOSE</span><span class="w"> </span><span class="s">3000</span>
+</span><span id="__span-8-19"><a href="#__codelineno-8-19" id="__codelineno-8-19" name="__codelineno-8-19"></a>
+</span><span id="__span-8-20"><a href="#__codelineno-8-20" id="__codelineno-8-20" name="__codelineno-8-20"></a><span class="c"># Command to run once the container is up</span>
+</span><span id="__span-8-21"><a href="#__codelineno-8-21" id="__codelineno-8-21" name="__codelineno-8-21"></a><span class="k">CMD</span><span class="w"> </span><span class="p">[</span><span class="s2">"node"</span><span class="p">,</span><span class="w"> </span><span class="s2">"server.js"</span><span class="p">]</span>
 </span></code></pre></div>
 <p><img alt="dockerfile" src="../img/lab_1/task_2_1_Dockerfile.png"/></p>
 <p><strong>Expected Result:</strong></p>
+<p>After the Dockerfile, this is the content expected</p>
 <ul>
 <li>server.js</li>
 <li>package.json</li>
 <li>Dockerfile</li>
 </ul>
 <p><img alt="Project_files" src="../img/lab_1/task_2_1_files.png"/></p>
+<mark class="critic block">
+<p><em>Note</em>: There is a folder named <code>node_modules</code>. This folder include all the libraries in use by the project and it could growth in space. It is a best practice <strong>NOT TO COPY THIS FOLDER INTO CONTAINER IMAGE</strong>. For that you can use a special file named <code>dockerignore</code> where you define which content to avoid sending into the image at build time.</p>
+</mark>
 <hr/>
 <h3 id="task-3-build-the-container-image">Task 3: Build the Container Image</h3>
 <p>You will now build the Docker image that packages the application.</p>
-<p>Open a terminal in the code server</p>
+<p>Build an image means execute all the commands defined in the Dockerfile. Open a terminal in the code server</p>
 <p>Run:</p>
 <div class="language-sh highlight"><pre><span></span><code><span id="__span-9-1"><a href="#__codelineno-9-1" id="__codelineno-9-1" name="__codelineno-9-1"></a>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>lab1-express:1.0<span class="w"> </span>.
 </span></code></pre></div>
-<p>Note: pay attention to the <code>.</code> (dot) at the end</p>
+<mark class="critic block">
+<p>Note: pay attention to the <code>.</code> (dot) at the end, this means: "look for the Dockerfile in this folder". You can create a Dockerfile with different names, so instead the <code>.</code> you use your custom filename.</p>
+<p>The <code>-t</code> in the command means the tag you are going to use to refer to the image. There is a convention to use canonical name like <code>my_registry.tld\my_user_id\my_image_name:latest</code>, i.e <code>registry.latampod.com\frbello\lab1-express:1.0</code>.</p>
+<p>For brevity, we are not using the canonical, but for production that's the best practice.</p>
+</mark>
+<p>This command will initiate a proccess similar to this image</p>
+<p><img alt="docker_build" src="../img/lab_1/task_3_docker_build.png"/></p>
 <p>Verify the image:</p>
 <div class="language-sh highlight"><pre><span></span><code><span id="__span-10-1"><a href="#__codelineno-10-1" id="__codelineno-10-1" name="__codelineno-10-1"></a>docker<span class="w"> </span>images<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>lab1-express
 </span></code></pre></div>
 <p><strong>Expected Result:</strong></p>
+<p>This will show our image exists in the local registry in our machine.</p>
 <div class="language-sh highlight"><pre><span></span><code><span id="__span-11-1"><a href="#__codelineno-11-1" id="__codelineno-11-1" name="__codelineno-11-1"></a>lab1-express<span class="w"> </span><span class="m">1</span>.0<span class="w"> </span>...
 </span></code></pre></div>
-<p><img alt="docker_build" src="../img/lab_1/task_3_docker_build.png"/></p>
 <hr/>
 <h3 id="task-4-deploy-with-docker-run">Task 4: Deploy with <code>docker run</code></h3>
 <p>Next, you will run the container and expose it externally using port mapping.</p>
@@ -1184,6 +1214,7 @@
 <h4 id="52-start-the-service">5.2 Start the service</h4>
 <div class="language-sh highlight"><pre><span></span><code><span id="__span-15-1"><a href="#__codelineno-15-1" id="__codelineno-15-1" name="__codelineno-15-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
 </span></code></pre></div>
+<p>The <code>-d</code> flag means to run the service as background.</p>
 <p><img alt="compose_up" src="../img/lab_1/task_5_1_compose_up.png"/></p>
 <div class="language-sh highlight"><pre><span></span><code><span id="__span-16-1"><a href="#__codelineno-16-1" id="__codelineno-16-1" name="__codelineno-16-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>ps
 </span></code></pre></div>
@@ -1280,8 +1311,8 @@ Cleanup should remove running containers, but must not delete source code or ima
 <li>The service should start with docker compose up -d</li>
 <li>The page should be reachable at <code>http://localhost:8083</code></li>
 </ul>
-<p><strong>Expected Result</strong></p>
-<p>Running <code>curl http://localhost:8083</code> returns the static HTML page.</p>
+<p><strong>Expected Result</strong>
+Running <code>curl http://localhost:8083</code> returns the static HTML page.</p>
 <p><em>Hint:</em></p>
 <ul>
 <li>Your compose file will need an nginx service with a ports: mapping of <code>"8083:80"</code></li>

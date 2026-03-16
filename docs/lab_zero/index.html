@@ -1307,6 +1307,8 @@
 <hr />
 <h3 id="task-3-verify-docker-tooling">Task 3: Verify Docker Tooling</h3>
 <p>Docker is required to run container-based workloads in the lab.</p>
+<p>For the Docker API the main tool is <code>docker</code> which is the entry point for all the container services in the host.</p>
+<p><code>docker</code> is text-based tool that allows users to interact with the Docker Engine and manage various aspects of the Docker ecosystem directly from the terminal. It is the primary way many users control Docker and is a core component of the Docker client-server architecture</p>
 <h4 id="31-check-docker-cli">3.1 Check Docker CLI</h4>
 <p>Run:</p>
 <div class="language-sh highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>docker<span class="w"> </span>ps
@@ -1317,6 +1319,8 @@
 <p><img alt="docker_cli" src="../img/lab_0/task_3_1_docker.png" /></p>
 <p>This indicates Docker is installed (even if no containers are currently running).</p>
 <h4 id="32-check-docker-compose">3.2 Check Docker Compose</h4>
+<p><code>docker compose</code> is a tool for define and run multi-container applications. It allows developer to manage an entire application stack (including services, networks, and volumes), using a single YAML file.</p>
+<p>This is the common segway from container into orchestration but before k8s.</p>
 <p>Run:</p>
 <div class="language-sh highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>version
 </span></code></pre></div>
@@ -1328,6 +1332,7 @@
 <h3 id="task-4-verify-kubernetes-tooling">Task 4: Verify Kubernetes Tooling</h3>
 <p>The core Kubernetes toolchain is pre-installed on <code>kind-host</code>.</p>
 <h4 id="41-kind-cli">4.1 KinD CLI</h4>
+<p><code>kind cli</code> is the tool used for running local kubernetes clusters using Docker containers as k8s nodes. KinD means "Kubernetes in Docker". <mark>This is intended for lab only and it is never used in production</mark></p>
 <p>Run:</p>
 <div class="language-sh highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>kind<span class="w"> </span>version
 </span></code></pre></div>
@@ -1335,6 +1340,7 @@
 <div class="language-sh highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>kind<span class="w"> </span>v0.31.0<span class="w"> </span>go1.25.5<span class="w"> </span>linux/amd64
 </span></code></pre></div>
 <h4 id="42-kubectl-cli">4.2 Kubectl CLI</h4>
+<p><code>kubectl</code> is the primary cli tool for interacting with k8s clusters via API. It works by sending commands for resource creations, management and debugging. <code>kubectl</code> could be installed on Windows, Linux and macOS.</p>
 <p>Run:</p>
 <div class="language-sh highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>kubectl<span class="w"> </span>version
 </span></code></pre></div>
@@ -1346,6 +1352,7 @@
 </span></code></pre></div>
 <p>Note: At this stage, the cluster may not yet be running, so connection warnings are expected.</p>
 <h4 id="43-helm-cli">4.3 helm CLI</h4>
+<p><code>helm</code> is a packet manager for k8s, acting like <code>apt</code> on debian/ubuntu or <code>brew</code> in macOS. Helm simplifies deploying application by using charts, which are preconfigured templates. The chart helps to automate the installation of numerous YAML manifest files with a single command.</p>
 <p>Run:</p>
 <div class="language-sh highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>helm<span class="w"> </span>version
 </span></code></pre></div>
@@ -1353,6 +1360,8 @@
 <div class="language-sh highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>version.BuildInfo<span class="o">{</span>Version:<span class="s2">&quot;v4.1.1&quot;</span>,<span class="w"> </span>GitCommit:<span class="s2">&quot;5caf...&quot;</span>,...<span class="o">}</span>
 </span></code></pre></div>
 <h4 id="44-verify-nodejs-and-npm-are-installed">4.4 Verify Node.js and npm are installed</h4>
+<p>Node is a JavaScript runtime that allows developer to execute code outside the web browser. Node enables javascript to be used as server-side development tool, to create API and middleware. Node offers very popular libraries like ExpressJS to create webservers.</p>
+<p>NPM is the packet manager for nodes, similar to <code>pip</code> in Python.</p>
 <p>Run:</p>
 <div class="language-sh highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>node<span class="w"> </span>--version
 </span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>npm<span class="w"> </span>--version
@@ -1424,8 +1433,8 @@
 <p><img alt="Explorer_Pane" src="../img/code-server-explorer.png" /></p>
 <hr />
 <h2 id="lab-completion">Lab Completion</h2>
-<p><strong>CONGRATULATIONS! This complete the Lab 0</strong></p>
-<p>You are now connected, oriented, and ready to begin the next lab exercises.</p><style type="text/css">.quiz {
+<p>CONGRATULATIONS! This complete the Lab 0!!
+You are now connected, oriented, and ready to begin the next lab exercises.</p><style type="text/css">.quiz {
   border: 1px solid black;
   padding: 1rem;
   margin: 1rem 0;
