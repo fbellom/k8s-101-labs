@@ -2137,6 +2137,7 @@
 </span><span id="__span-13-10"><a href="#__codelineno-13-10" id="__codelineno-13-10" name="__codelineno-13-10"></a><span class="w">  </span>--set<span class="w"> </span>externalIPs.enabled<span class="o">=</span><span class="nb">true</span><span class="w"> </span><span class="se">\</span>
 </span><span id="__span-13-11"><a href="#__codelineno-13-11" id="__codelineno-13-11" name="__codelineno-13-11"></a><span class="w">  </span>--wait<span class="w"> </span>--timeout<span class="w"> </span>5m
 </span></code></pre></div>
+<mark class="critic block">
 <blockquote>
 <p><strong>Explanation of key flags:</strong></p>
 <ul>
@@ -2149,6 +2150,7 @@
 <li><code>externalIPs.enabled=true</code> — allows Cilium to handle external IP assignments (used in Task 11)</li>
 </ul>
 </blockquote>
+</mark>
 <p><strong>Expected Result:</strong></p>
 <p>Helm will install all Cilium components and wait for them to be ready.</p>
 <h4 id="23-verify-cilium-pods-are-running">2.3 Verify Cilium pods are running</h4>
